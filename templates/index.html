@@ -124,6 +124,12 @@
             color: white;
         }
 
+        .chat-message.thinking .message {
+            background-color: #f0f4f8;
+            font-style: italic;
+            color: #999;
+        }
+
         pre {
             background-color: #2d3436;
             color: #dfe6e9;
@@ -331,6 +337,27 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
+        function appendThinkingMessage() {
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'chat-message bot thinking';
+            thinkingDiv.id = 'thinking-message';
+
+            const messageBubble = document.createElement('div');
+            messageBubble.className = 'message';
+            messageBubble.textContent = 'Bot is thinking...';
+
+            thinkingDiv.appendChild(messageBubble);
+            chatBox.appendChild(thinkingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeThinkingMessage() {
+            const thinkingMessage = document.getElementById('thinking-message');
+            if (thinkingMessage) {
+                thinkingMessage.remove();
+            }
+        }
+
         function sendMessage() {
             const message = userInput.value.trim();
             const course = document.getElementById("course-dropdown").value;
@@ -339,20 +366,26 @@
             const topic = document.getElementById("topic-dropdown").value;
 
             if (message) {
-                appendMessage('user', message);
+                appendMessage('user', message); // User message
+                appendThinkingMessage(); // Show "Bot is thinking..."
+                
                 axios.post('/chat', { message, course, week, day, topic })
                     .then(response => {
-                        appendMarkdownMessage('bot', response.data.reply);
+                        removeThinkingMessage(); // Remove "Bot is thinking..."
+                        appendMarkdownMessage('bot', response.data.reply); // Bot response
                     })
                     .catch(error => {
+                        removeThinkingMessage(); // Remove "Bot is thinking..."
                         appendMessage('bot', 'Sorry, something went wrong.');
                         console.error('Error sending message:', error);
                     });
+
                 userInput.value = '';
             } else {
                 alert('Please type a message.');
             }
         }
+
 
         // Redirect to Quiz Page
         function redirectToQuiz() {
