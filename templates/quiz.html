@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+
+        .quiz-options li {
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        .quiz-options li.selected {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .quiz-options li:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-submit {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <h1 class="text-center" id="quiz-title">Quiz</h1>
+        <p id="quiz-description" class="text-center"></p>
+        <div id="quiz-content">
+            <p>Loading quiz...</p>
+        </div>
+        <button class="btn btn-primary btn-submit" id="submit-quiz" style="display: none;">Submit Quiz</button>
+    </div>
+
+    <script>
+        const quizContent = document.getElementById("quiz-content");
+        const submitButton = document.getElementById("submit-quiz");
+        const quizTitle = document.getElementById("quiz-title");
+        const quizDescription = document.getElementById("quiz-description");
+
+        let quizData = [];
+        let userResponses = [];
+
+        // Fetch Quiz Data
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const course = params.get("course");
+            const week = params.get("week");
+            const day = params.get("day");
+            const topic = params.get("topic");
+
+            if (!course || !week || !day || !topic) {
+                quizContent.innerHTML = `<p class="text-danger">Invalid parameters. Please try again.</p>`;
+                return;
+            }
+
+            axios.post("/start_quiz", { course, week, day, topic })
+                .then(response => {
+                    const quizResponse = response.data.quiz.quiz;
+                    quizData = quizResponse.questions;
+                    quizTitle.textContent = quizResponse.title;
+                    quizDescription.textContent = quizResponse.description;
+                    displayQuiz();
+                })
+                .catch(error => {
+                    quizContent.innerHTML = `<p class="text-danger">Error loading quiz. Please try again later.</p>`;
+                    console.error(error);
+                });
+        });
+
+        // Display Quiz
+        function displayQuiz() {
+            if (!quizData || quizData.length === 0) {
+                quizContent.innerHTML = `<p class="text-danger">No quiz data found.</p>`;
+                return;
+            }
+
+            const questionsHtml = quizData.map((q, index) => `
+                <div class="quiz-question">
+                    <h5>${index + 1}. ${q.question}</h5>
+                    <ul class="list-group quiz-options" id="options-${q.id}">
+                        ${q.options.map(option => `
+                            <li class="list-group-item" onclick="selectAnswer(${index}, '${option.id}')" data-option-id="${option.id}">
+                                ${option.text}
+                            </li>
+                        `).join("")}
+                    </ul>
+                </div>
+            `).join("");
+
+            quizContent.innerHTML = questionsHtml;
+            submitButton.style.display = "block";
+        }
+
+        // Select Answer
+        function selectAnswer(questionIndex, selectedOptionId) {
+            userResponses[questionIndex] = selectedOptionId;
+
+            const optionsList = document.getElementById(`options-${quizData[questionIndex].id}`);
+            const options = optionsList.querySelectorAll("li");
+
+            options.forEach(option => {
+                option.classList.remove("selected");
+                if (option.getAttribute("data-option-id") === selectedOptionId) {
+                    option.classList.add("selected");
+                }
+            });
+
+            console.log(`Question ${questionIndex + 1}: Selected Option ID: "${selectedOptionId}"`);
+        }
+
+        // Submit Quiz
+        submitButton.addEventListener("click", () => {
+            if (userResponses.length !== quizData.length || userResponses.includes(undefined)) {
+                alert("Please answer all questions before submitting.");
+                return;
+            }
+
+            axios.post("/submit_quiz", { responses: userResponses, quiz: { questions: quizData } })
+                .then(response => {
+                    const { score, total, feedback } = response.data;
+                    quizContent.innerHTML = `
+                        <h2 class="text-success">Quiz Completed!</h2>
+                        <p>Your Score: ${score} / ${total}</p>
+                        <div>
+                            ${feedback.map((item, index) => `
+                                <p><strong>Q${index + 1}:</strong> ${item.question}</p>
+                                <p>${item.correct ? "Correct!" : `Incorrect (Correct Answer: ${item.correct_answer})`}</p>
+                            `).join("")}
+                        </div>
+                    `;
+                    submitButton.style.display = "none";
+                })
+                .catch(error => {
+                    quizContent.innerHTML = `<p class="text-danger">Error submitting quiz. Please try again later.</p>`;
+                    console.error(error);
+                });
+        });
+    </script>
+</body>
+
+</html>

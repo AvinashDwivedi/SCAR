@@ -1,0 +1,128 @@
+### **Python for Beginners**  
+#### **Week 3: Modules, File Handling, and Error Handling**  
+---
+
+### **Day 3: Exception Handling in Python**
+
+---
+
+#### **Topics Covered:**
+
+1. **Introduction to Exception Handling**
+   - **Definition**: Exception handling is a mechanism that allows a program to deal with runtime errors (exceptions) gracefully, preventing the program from crashing and providing meaningful error messages to users.
+   - **Why Use Exception Handling**: It allows the program to handle errors without crashing, provides a way to control the flow of the program when unexpected situations arise, and improves program reliability.
+   
+2. **Common Python Exceptions**
+   - **SyntaxError**: Raised when the Python interpreter encounters an error in the syntax of the program.
+   - **ValueError**: Raised when a function receives an argument of the correct type but inappropriate value.
+   - **TypeError**: Raised when an operation or function is applied to an object of inappropriate type.
+   - **FileNotFoundError**: Raised when trying to open a file that does not exist.
+   - **ZeroDivisionError**: Raised when attempting to divide by zero.
+
+3. **Using `try` and `except` Blocks**
+   - The basic structure for exception handling involves a `try` block (where you place code that may raise an exception) and one or more `except` blocks (where you catch and handle the exception).
+   - **Syntax**:
+     ```python
+     try:
+         # Code that may raise an exception
+         num = 10 / 0  # Will raise ZeroDivisionError
+     except ZeroDivisionError as e:
+         # Code to handle the exception
+         print(f"Error: {e}")
+     ```
+   - **How it Works**:
+     - The code in the `try` block is executed.
+     - If an exception occurs, the rest of the `try` block is skipped, and the corresponding `except` block is executed.
+     - If no exception occurs, the `except` block is skipped.
+
+4. **Catching Multiple Exceptions**
+   - You can handle multiple types of exceptions by using multiple `except` blocks.
+     ```python
+     try:
+         num = int(input("Enter a number: "))
+         result = 10 / num
+     except ValueError as e:
+         print(f"Invalid input. Please enter an integer. Error: {e}")
+     except ZeroDivisionError as e:
+         print(f"Cannot divide by zero. Error: {e}")
+     except Exception as e:
+         print(f"An unexpected error occurred: {e}")
+     ```
+
+5. **The `else` Clause**
+   - The `else` block can be used after all `except` blocks. It executes only if no exceptions were raised in the `try` block.
+     ```python
+     try:
+         num = int(input("Enter a number: "))
+         result = 10 / num
+     except ZeroDivisionError:
+         print("Cannot divide by zero.")
+     except ValueError:
+         print("Invalid input. Please enter an integer.")
+     else:
+         print(f"The result is {result}")
+     ```
+
+6. **The `finally` Clause**
+   - The `finally` block is always executed, regardless of whether an exception was raised or not. It is often used to clean up resources (like closing files or database connections).
+     ```python
+     try:
+         file = open('example.txt', 'r')
+         content = file.read()
+     except FileNotFoundError as e:
+         print(f"File not found: {e}")
+     finally:
+         file.close()  # Ensures file is closed whether or not there was an exception
+     ```
+
+7. **Raising Exceptions**
+   - You can manually raise exceptions using the `raise` keyword. This is useful for signaling errors in your own code.
+     ```python
+     def divide(a, b):
+         if b == 0:
+             raise ValueError("Cannot divide by zero.")
+         return a / b
+     
+     try:
+         result = divide(10, 0)
+     except ValueError as e:
+         print(f"Error: {e}")
+     ```
+
+---
+
+#### **Examples and Exercises**
+
+- **Exercise 1: Basic Exception Handling**
+   - Write a program that asks the user to input two numbers and divides them. Use exception handling to catch division by zero and invalid input (non-numeric input).
+
+- **Exercise 2: Handling Multiple Exceptions**
+   - Create a program that asks the user for a filename and attempts to open and read it. Handle exceptions for a file that doesn't exist (`FileNotFoundError`), or any other errors that might occur during file reading.
+
+- **Exercise 3: Using `else` and `finally`**
+   - Write a program that opens a file, reads its content, and prints it. Use `else` to print a success message if no error occurred, and use `finally` to close the file (whether or not an error occurred).
+
+- **Exercise 4: Raising Exceptions**
+   - Create a function `square_root(n)` that calculates the square root of a number. If the input is negative, raise a `ValueError` with an appropriate error message. Handle this exception in the main program.
+
+- **Exercise 5: Nested Exception Handling**
+   - Write a program that takes two integers as input from the user. The program should attempt to divide the first number by the second. If an exception occurs (such as division by zero or invalid input), print a message and allow the user to try again.
+
+---
+
+#### **Key Concepts Summary:**
+
+- **Exception Handling** helps you catch and manage errors, improving the program's reliability.
+- **`try` and `except`**: Basic structure for handling exceptions.
+- **`else`**: Executes if no exception occurs in the `try` block.
+- **`finally`**: Executes no matter what, used for cleanup (like closing files).
+- **Raising Exceptions**: You can manually raise exceptions using the `raise` keyword to handle specific error cases.
+
+---
+
+#### **Further Practice**
+
+- **Task 1**: Build a program that simulates a simple ATM system. It should handle exceptions for invalid PIN, insufficient funds, and incorrect input for deposit/withdrawal amounts.
+- **Task 2**: Create a program that processes a list of user input values (such as names or ages). Handle any invalid input with appropriate exception handling and provide feedback to the user.
+
+---

@@ -1,0 +1,117 @@
+### **Python for Beginners**  
+#### **Week 3: Modules, File Handling, and Error Handling**  
+---
+
+### **Day 1: Modules and Libraries**
+
+---
+
+#### **Topics Covered:**
+
+1. **Introduction to Modules**
+   - **Definition**: A module is a file containing Python definitions and statements. It allows you to organize your code into separate files and reuse functions, classes, and variables across different Python programs.
+   - **Why Use Modules**: Modules help you break large code files into smaller, manageable pieces, improve code reusability, and make your code more organized.
+
+2. **Importing Modules**
+   - To use the code from a module, you need to import it into your script. Python provides different ways to import modules.
+   - **Basic Import**: Use the `import` keyword followed by the module name. 
+     ```python
+     import math
+     print(math.sqrt(16))  # Output: 4.0
+     ```
+   - **Importing Specific Functions or Variables**: You can import specific functions or classes from a module using the `from` keyword.
+     ```python
+     from math import sqrt
+     print(sqrt(16))  # Output: 4.0
+     ```
+   - **Importing All Functions**: Use `*` to import all functions and variables from a module.
+     ```python
+     from math import *
+     print(sqrt(16))  # Output: 4.0
+     ```
+   - **Alias for Modules**: You can use `as` to create an alias for a module or function, making your code shorter and easier to read.
+     ```python
+     import math as m
+     print(m.sqrt(16))  # Output: 4.0
+     ```
+
+3. **Popular Built-in Modules for Beginners**
+   - **math**: Provides mathematical functions.
+     ```python
+     import math
+     print(math.pi)  # Output: 3.141592653589793
+     ```
+   - **random**: Useful for generating random numbers and making random selections.
+     ```python
+     import random
+     print(random.randint(1, 10))  # Output: Random integer between 1 and 10
+     ```
+   - **datetime**: Helps work with dates and times.
+     ```python
+     import datetime
+     now = datetime.datetime.now()
+     print(now)  # Output: current date and time
+     ```
+   - **os**: Allows interaction with the operating system (e.g., file operations, environment variables).
+     ```python
+     import os
+     print(os.getcwd())  # Output: Current working directory
+     ```
+   - **sys**: Provides access to system-specific parameters and functions (e.g., command-line arguments).
+     ```python
+     import sys
+     print(sys.argv)  # List of command-line arguments passed to the script
+     ```
+
+4. **Creating Your Own Modules**
+   - You can create your own module by saving Python code in a file with a `.py` extension. For example, let's create a module called `my_module.py` with the following content:
+     ```python
+     # my_module.py
+     def greet(name):
+         print(f"Hello, {name}!")
+     
+     def add(a, b):
+         return a + b
+     ```
+   - Then, in another Python file, you can import and use this module:
+     ```python
+     import my_module
+     my_module.greet("Alice")  # Output: Hello, Alice!
+     result = my_module.add(5, 3)
+     print(result)  # Output: 8
+     ```
+
+---
+
+#### **Examples and Exercises**
+
+- **Exercise 1: Using the `math` Module**
+   - Use the `math` module to calculate the square root of 81, the sine of 30 degrees, and the value of π.
+
+- **Exercise 2: Working with the `random` Module**
+   - Generate a random number between 1 and 100.
+   - Create a list of 10 random numbers between 1 and 50, and then find the maximum and minimum values in the list.
+
+- **Exercise 3: Date and Time with the `datetime` Module**
+   - Use the `datetime` module to print the current date and time in the format `YYYY-MM-DD HH:MM:SS`.
+   - Calculate the difference between two dates (e.g., today's date and a given date).
+
+- **Exercise 4: Create Your Own Module**
+   - Create a module named `calculator.py` that contains functions for basic operations: `add()`, `subtract()`, `multiply()`, and `divide()`. Then, in another script, import and use these functions to perform calculations.
+
+---
+
+#### **Key Concepts Summary:**
+
+- **Modules** allow you to organize code into separate files and reuse functions and variables.
+- Python provides many built-in modules such as `math`, `random`, `datetime`, `os`, and `sys` for common tasks.
+- You can create your own modules by saving functions in `.py` files and importing them into other scripts.
+
+---
+
+#### **Further Practice**
+
+- **Task 1**: Create a module `utilities.py` that contains functions for converting temperature between Celsius and Fahrenheit, calculating the area of a rectangle, and checking if a number is prime.
+- **Task 2**: Use the `os` module to list all files in a given directory and find their sizes.
+
+---

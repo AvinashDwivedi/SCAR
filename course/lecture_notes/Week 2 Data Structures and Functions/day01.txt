@@ -1,0 +1,112 @@
+**Python for Beginners - Week 2, Day 1 Lecture Notes**
+
+---
+
+### **Learning Objectives**
+- Learn about strings in Python.
+- Understand string operations and methods.
+- Explore slicing techniques for strings.
+
+---
+
+### **Strings in Python**
+
+Strings are sequences of characters enclosed in single (`'`) or double (`"`) quotes.
+  ```python
+  message = "Hello, World!"
+  print(message)
+  ```
+
+---
+
+### **String Operations**
+
+#### **Concatenation**
+- Combine two or more strings using the `+` operator.
+  ```python
+  first_name = "John"
+  last_name = "Doe"
+  full_name = first_name + " " + last_name
+  print(full_name)
+  ```
+
+#### **Repetition**
+- Repeat a string multiple times using the `*` operator.
+  ```python
+  print("Hello! " * 3)
+  ```
+
+#### **Membership Operators**
+- Check if a substring exists within a string using `in` or `not in`.
+  ```python
+  print("Hello" in "Hello, World!")  # True
+  print("Python" not in "Hello, World!")  # True
+  ```
+
+---
+
+### **Slicing Strings**
+- Extract parts of a string using slicing.
+  ```python
+  text = "Python Programming"
+  print(text[0:6])  # Output: Python
+  print(text[:6])   # Output: Python
+  print(text[7:])   # Output: Programming
+  print(text[-11:]) # Output: Programming
+  ```
+
+---
+
+### **String Methods**
+1. `lower()`: Converts all characters to lowercase.
+   ```python
+   print("HELLO".lower())
+   ```
+2. `upper()`: Converts all characters to uppercase.
+   ```python
+   print("hello".upper())
+   ```
+3. `strip()`: Removes leading and trailing whitespaces.
+   ```python
+   print("  hello  ".strip())
+   ```
+4. `replace()`: Replaces a substring with another substring.
+   ```python
+   print("Hello, World!".replace("World", "Python"))
+   ```
+5. `split()`: Splits a string into a list based on a delimiter.
+   ```python
+   print("apple,banana,cherry".split(","))
+   ```
+6. `join()`: Joins elements of a list into a single string.
+   ```python
+   fruits = ["apple", "banana", "cherry"]
+   print(",".join(fruits))
+   ```
+
+---
+
+### **Practice Activity**
+1. Write a program to take a full name as input and display the first and last names separately.
+2. Create a program to count the number of vowels in a given string.
+3. Reverse a string using slicing.
+
+**Example Code:**
+```python
+# Separate first and last names
+full_name = input("Enter your full name: ")
+parts = full_name.split()
+print("First Name:", parts[0])
+print("Last Name:", parts[-1])
+
+# Count vowels
+text = input("Enter a string: ").lower()
+vowels = "aeiou"
+count = sum(1 for char in text if char in vowels)
+print("Number of vowels:", count)
+
+# Reverse a string
+string = input("Enter a string: ")
+print("Reversed String:", string[::-1])
+```
+

@@ -1,0 +1,136 @@
+### **Python for Beginners**  
+#### **Week 2: Data Structures and Functions**  
+---
+
+### **Day 3: Tuples and Dictionaries**
+
+---
+
+#### **Topics Covered:**
+
+1. **Tuples**
+   - **Definition**: A tuple is a collection of ordered, immutable elements in Python. Once a tuple is created, its elements cannot be modified (no appending, deleting, or changing elements).
+   - **Creating Tuples**:  
+     You can create a tuple by placing elements inside parentheses `()`.  
+     ```python
+     my_tuple = (1, 2, 3)
+     ```
+   - **Accessing Elements**:  
+     Like lists, you can access tuple elements using indexing.  
+     ```python
+     my_tuple = (10, 20, 30)
+     print(my_tuple[0])  # Output: 10
+     ```
+   - **Tuple Characteristics**:
+     - Immutable: Cannot be changed after creation.
+     - Ordered: The elements have a specific order, and indexing works.
+     - Allows duplicate values.
+   
+   - **Operations on Tuples**:
+     - **Concatenation**:  
+       ```python
+       tuple1 = (1, 2, 3)
+       tuple2 = (4, 5, 6)
+       result = tuple1 + tuple2  # Output: (1, 2, 3, 4, 5, 6)
+       ```
+     - **Repetition**:  
+       ```python
+       tuple1 = (1, 2, 3)
+       result = tuple1 * 2  # Output: (1, 2, 3, 1, 2, 3)
+       ```
+     - **Length**:  
+       ```python
+       len(tuple1)  # Output: 3
+       ```
+     - **Membership Check**:  
+       ```python
+       2 in tuple1  # Output: True
+       ```
+     - **Slicing**:  
+       ```python
+       tuple1[1:3]  # Output: (2, 3)
+       ```
+     - **Unpacking**:  
+       ```python
+       a, b, c = (10, 20, 30)
+       print(a, b, c)  # Output: 10 20 30
+       ```
+
+2. **Dictionaries**
+   - **Definition**: A dictionary is an unordered collection of key-value pairs. Keys must be unique and immutable, while values can be of any data type.
+   - **Creating Dictionaries**:  
+     You can create a dictionary using curly braces `{}` with key-value pairs.
+     ```python
+     my_dict = {'name': 'Alice', 'age': 25, 'city': 'New York'}
+     ```
+   - **Accessing Elements**:  
+     Access values by using the corresponding key inside square brackets `[]`.
+     ```python
+     print(my_dict['name'])  # Output: Alice
+     ```
+   - **Adding and Updating Elements**:
+     - **Adding**:  
+       ```python
+       my_dict['email'] = 'alice@example.com'
+       ```
+     - **Updating**:  
+       ```python
+       my_dict['age'] = 26
+       ```
+   - **Removing Elements**:  
+     - **Using `del`**:  
+       ```python
+       del my_dict['city']
+       ```
+     - **Using `pop()`**:  
+       ```python
+       age = my_dict.pop('age')  # Removes 'age' and returns the value
+       ```
+   - **Dictionary Methods**:
+     - **Keys**: Returns a view object of dictionary keys.
+       ```python
+       print(my_dict.keys())  # Output: dict_keys(['name', 'email'])
+       ```
+     - **Values**: Returns a view object of dictionary values.
+       ```python
+       print(my_dict.values())  # Output: dict_values(['Alice', 'alice@example.com'])
+       ```
+     - **Items**: Returns a view object of key-value pairs.
+       ```python
+       print(my_dict.items())  # Output: dict_items([('name', 'Alice'), ('email', 'alice@example.com')])
+       ```
+
+---
+
+#### **Examples and Exercises**
+
+- **Exercise 1: Working with Tuples**
+   - Create a tuple `tuple1 = (5, 10, 15, 20, 25)`.
+   - Access the first and last element.
+   - Find the length of the tuple.
+   - Concatenate `tuple1` with another tuple `tuple2 = (30, 35)`.
+   - Slice the tuple to get elements from index 1 to 3.
+
+- **Exercise 2: Working with Dictionaries**
+   - Create a dictionary `person = {'name': 'John', 'age': 30, 'job': 'developer'}`.
+   - Add a new key-value pair for 'location' as 'USA'.
+   - Update the 'age' to 31.
+   - Remove the 'job' key.
+   - Use `keys()`, `values()`, and `items()` to display the dictionary information.
+
+---
+
+#### **Key Concepts Summary:**
+
+- **Tuples** are immutable, ordered collections, useful for storing fixed data that should not be modified.
+- **Dictionaries** are unordered collections of key-value pairs, perfect for looking up values based on keys. They provide fast access to data.
+
+---
+
+#### **Further Practice**
+
+- **Task 1**: Create a tuple containing the names of five countries, then try to modify an element (and observe what happens).
+- **Task 2**: Write a function that accepts a dictionary of student grades and returns the average grade.
+  
+---
+

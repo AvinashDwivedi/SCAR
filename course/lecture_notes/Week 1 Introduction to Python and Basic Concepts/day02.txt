@@ -1,0 +1,95 @@
+**Python for Beginners - Week 1, Day 2 Lecture Notes**
+
+---
+
+### **Learning Objectives**
+- Understand Python’s syntax and basic operations.
+- Work with variables and different data types.
+
+---
+
+### **Python Syntax**
+
+#### **Indentation**
+- Python uses indentation to define the structure of the code.
+- Example:
+  ```python
+  if True:
+      print("This is indented correctly.")
+  ```
+- IndentationError occurs when the code is not properly aligned.
+
+#### **Comments**
+- **Single-line Comments**: Use `#`.
+  ```python
+  # This is a comment
+  print("Hello, World!")
+  ```
+- **Multi-line Comments**: Use triple quotes (`'''` or `"""`).
+  ```python
+  """
+  This is a multi-line comment.
+  It spans multiple lines.
+  """
+  ```
+
+#### **Basic Operations**
+- Arithmetic Operators: `+`, `-`, `*`, `/`, `//` (floor division), `%` (modulus), `**` (exponentiation).
+  ```python
+  print(5 + 3)  # Addition
+  print(10 / 2) # Division
+  ```
+- Comparison Operators: `==`, `!=`, `<`, `>`, `<=`, `>=`.
+- Logical Operators: `and`, `or`, `not`.
+
+---
+
+### **Variables and Data Types**
+
+#### **Variables**
+- Variables store values and are defined using the `=` operator.
+  ```python
+  x = 10
+  name = "Avinash"
+  ```
+
+#### **Data Types**
+1. **int**: Integer values.
+   ```python
+   age = 25
+   ```
+2. **float**: Decimal numbers.
+   ```python
+   price = 19.99
+   ```
+3. **str**: Text.
+   ```python
+   greeting = "Hello"
+   ```
+4. **bool**: Boolean values (`True`, `False`).
+   ```python
+   is_active = True
+   ```
+
+---
+
+### **Practice Activity**
+1. Declare variables of each data type and print them.
+2. Write a Python program to perform basic arithmetic operations.
+
+**Example Code:**
+```python
+# Declare variables
+x = 5
+y = 3.2
+name = "Avinash"
+is_student = True
+
+# Print variables
+print(x, y, name, is_student)
+
+# Perform operations
+print("Sum:", x + y)
+print("Difference:", x - y)
+```
+

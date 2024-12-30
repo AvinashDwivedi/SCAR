@@ -1,0 +1,145 @@
+### **Python for Beginners**  
+#### **Week 2: Data Structures and Functions**  
+---
+
+### **Day 5: Functions in Python**
+
+---
+
+#### **Topics Covered:**
+
+1. **Introduction to Functions**
+   - **Definition**: A function is a block of code that only runs when it is called. Functions are used to break down complex problems into smaller, manageable pieces, improving code reusability and modularity.
+   - **Defining Functions**:  
+     Functions are defined using the `def` keyword, followed by the function name and parentheses `()`. If the function has parameters, they are listed inside the parentheses.
+     ```python
+     def greet():
+         print("Hello, World!")
+     ```
+   - **Calling Functions**:  
+     Once defined, you can call the function by using its name followed by parentheses.
+     ```python
+     greet()  # Output: Hello, World!
+     ```
+
+2. **Function Parameters**
+   - **Parameters**: Functions can accept values, called parameters or arguments, which allow the function to perform operations based on different inputs.
+     ```python
+     def greet(name):
+         print(f"Hello, {name}!")
+     
+     greet("Alice")  # Output: Hello, Alice!
+     ```
+   - **Default Parameters**: You can assign default values to parameters. If the caller does not provide a value, the default is used.
+     ```python
+     def greet(name="Guest"):
+         print(f"Hello, {name}!")
+     
+     greet()       # Output: Hello, Guest!
+     greet("John") # Output: Hello, John!
+     ```
+   - **Multiple Parameters**: Functions can accept multiple parameters.
+     ```python
+     def add(a, b):
+         return a + b
+     
+     result = add(2, 3)
+     print(result)  # Output: 5
+     ```
+
+3. **Return Statement**
+   - **Returning Values**: Functions can return values using the `return` keyword. Once a return statement is executed, the function terminates, and the returned value is sent back to the caller.
+     ```python
+     def square(x):
+         return x ** 2
+     
+     result = square(4)
+     print(result)  # Output: 16
+     ```
+
+4. **Function Scope**
+   - **Local Variables**: Variables declared inside a function are local to that function and cannot be accessed outside it.
+     ```python
+     def my_function():
+         local_variable = 10  # local to my_function
+         print(local_variable)
+     
+     my_function()  # Output: 10
+     # print(local_variable)  # This will raise an error
+     ```
+   - **Global Variables**: Variables declared outside any function are global, meaning they can be accessed anywhere in the code. However, if you want to modify a global variable inside a function, you need to use the `global` keyword.
+     ```python
+     x = 5  # Global variable
+     
+     def change_global():
+         global x
+         x = 10
+     
+     change_global()
+     print(x)  # Output: 10
+     ```
+
+5. **Keyword and Positional Arguments**
+   - **Positional Arguments**: The order of arguments in the function call matters. They are assigned based on their position.
+     ```python
+     def greet(name, age):
+         print(f"Hello, {name}. You are {age} years old.")
+     
+     greet("Alice", 25)  # Output: Hello, Alice. You are 25 years old.
+     ```
+   - **Keyword Arguments**: You can pass arguments by explicitly stating the parameter name. This allows you to pass them in any order.
+     ```python
+     greet(age=25, name="Alice")  # Output: Hello, Alice. You are 25 years old.
+     ```
+
+6. **Variable Length Arguments**
+   - **`*args`**: Used to pass a variable number of positional arguments to a function.
+     ```python
+     def add_numbers(*args):
+         return sum(args)
+     
+     result = add_numbers(1, 2, 3, 4)
+     print(result)  # Output: 10
+     ```
+   - **`**kwargs`**: Used to pass a variable number of keyword arguments to a function.
+     ```python
+     def describe_pet(**kwargs):
+         print(kwargs)
+     
+     describe_pet(name="Bella", animal="Dog")  # Output: {'name': 'Bella', 'animal': 'Dog'}
+     ```
+
+---
+
+#### **Examples and Exercises**
+
+- **Exercise 1: Define and Call a Function**
+   - Define a function `multiply(a, b)` that returns the product of two numbers. Call it with different arguments and print the result.
+
+- **Exercise 2: Function with Default Parameters**
+   - Write a function `welcome(name="Guest")` that prints "Welcome, {name}!". Call the function with and without passing an argument for `name`.
+
+- **Exercise 3: Using `*args` and `**kwargs`**
+   - Write a function `average(*numbers)` that accepts any number of arguments and returns their average.
+   - Write a function `display_info(**info)` that accepts any number of keyword arguments and prints them.
+
+- **Exercise 4: Return Statement**
+   - Write a function `is_even(number)` that returns `True` if the number is even, otherwise `False`. Call the function with different numbers and print the results.
+
+---
+
+#### **Key Concepts Summary:**
+
+- **Functions** allow you to modularize your code, making it reusable and easier to manage.
+- **Parameters** let you pass values into functions, with options for default values and multiple parameters.
+- The **`return`** statement lets functions send values back to the caller.
+- **Variable-length arguments** (`*args` and `**kwargs`) allow you to pass a flexible number of arguments to a function.
+
+---
+
+#### **Further Practice**
+
+- **Task 1**: Create a function that checks if a string is a palindrome. Use string slicing to compare the original string with its reverse.
+- **Task 2**: Write a function that accepts a list of numbers and returns a list of the squares of each number.
+
+---

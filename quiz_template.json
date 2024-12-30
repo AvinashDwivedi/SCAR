@@ -1,0 +1,31 @@
+{
+    "quiz": {
+      "title": "Quiz on Topic X",
+      "description": "This quiz tests your knowledge on Topic X. Good luck!",
+      "questions": [
+        {
+          "id": 1,
+          "question": "What is the capital of France?",
+          "options": [
+            { "id": "a", "text": "Paris" },
+            { "id": "b", "text": "Berlin" },
+            { "id": "c", "text": "Madrid" },
+            { "id": "d", "text": "Rome" }
+          ],
+          "correct_option_id": "a"
+        },
+        {
+          "id": 2,
+          "question": "What is 2 + 2?",
+          "options": [
+            { "id": "a", "text": "3" },
+            { "id": "b", "text": "4" },
+            { "id": "c", "text": "5" },
+            { "id": "d", "text": "6" }
+          ],
+          "correct_option_id": "b"
+        }
+      ]
+    }
+  }
+  

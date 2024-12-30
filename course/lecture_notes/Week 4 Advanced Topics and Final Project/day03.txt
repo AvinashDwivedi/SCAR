@@ -1,0 +1,211 @@
+### **Python for Beginners**  
+#### **Week 4: Advanced Topics and Final Project**  
+---
+
+### **Day 3: Introduction to Python Libraries for Data Handling**
+
+---
+
+#### **Topics Covered:**
+
+1. **Introduction to Python Libraries for Data Handling**  
+   Python provides several powerful libraries for data manipulation, analysis, and visualization. These libraries offer efficient ways to work with various data types, including numerical, categorical, and time-series data. In this lesson, we'll focus on **pandas**, one of the most widely-used libraries for data handling in Python.
+
+   - **Why Use Libraries?**
+     Libraries save you time and effort by providing pre-built functions to handle complex tasks, so you don’t have to reinvent the wheel. The major advantages of using libraries like `pandas` include:
+     - **Ease of use**: Simple and intuitive syntax for data manipulation.
+     - **Performance**: Optimized for performance, handling large datasets efficiently.
+     - **Extensive Functionality**: Provides built-in tools for data cleaning, transformation, analysis, and visualization.
+
+---
+
+2. **Introduction to `pandas`**  
+   `pandas` is an open-source Python library that provides high-performance, easy-to-use data structures and data analysis tools. The primary data structures in pandas are:
+   - **Series**: A one-dimensional labeled array (similar to a list or a dictionary).
+   - **DataFrame**: A two-dimensional table (similar to a spreadsheet or SQL table) with labeled axes (rows and columns).
+
+   - **Installing pandas**: You can install pandas using `pip` or `conda`.
+     ```bash
+     pip install pandas
+     ```
+
+---
+
+3. **Creating a pandas DataFrame**  
+   A `DataFrame` is the most common data structure in pandas. It is a two-dimensional tabular data structure with labeled rows and columns, where each column can be of a different data type (e.g., strings, integers, floats).
+
+   - **Creating DataFrames from various sources**:
+     - From a dictionary:
+       ```python
+       import pandas as pd
+
+       data = {
+           'Name': ['Alice', 'Bob', 'Charlie'],
+           'Age': [25, 30, 35],
+           'City': ['New York', 'Los Angeles', 'Chicago']
+       }
+       df = pd.DataFrame(data)
+       print(df)
+       ```
+
+     - Output:
+       ```
+           Name  Age         City
+       0    Alice   25     New York
+       1      Bob   30  Los Angeles
+       2  Charlie   35      Chicago
+       ```
+
+     - From a CSV file:
+       ```python
+       df = pd.read_csv('data.csv')
+       ```
+
+     - From a list of lists:
+       ```python
+       data = [['Alice', 25, 'New York'], ['Bob', 30, 'Los Angeles'], ['Charlie', 35, 'Chicago']]
+       df = pd.DataFrame(data, columns=['Name', 'Age', 'City'])
+       print(df)
+       ```
+
+---
+
+4. **Accessing Data in a pandas DataFrame**  
+   You can access rows, columns, and specific elements within a DataFrame using various methods.
+
+   - **Accessing Columns**: 
+     You can access a column in a DataFrame using either the dot notation or the bracket notation.
+     ```python
+     print(df['Name'])  # Bracket notation
+     print(df.Name)     # Dot notation (not recommended if column name conflicts with a method)
+     ```
+
+   - **Accessing Rows**:
+     Use `iloc[]` for positional indexing and `loc[]` for label-based indexing.
+     ```python
+     # Using iloc[] (integer-based position)
+     print(df.iloc[0])  # First row
+
+     # Using loc[] (label-based indexing)
+     print(df.loc[0])   # First row
+     ```
+
+   - **Accessing Specific Elements**:
+     You can access a specific element using the `loc[]` and `iloc[]` methods, specifying both row and column.
+     ```python
+     # Accessing by label
+     print(df.loc[0, 'Name'])  # 'Alice'
+
+     # Accessing by position
+     print(df.iloc[0, 1])      # 25 (Age of the first row)
+     ```
+
+---
+
+5. **Data Manipulation with pandas**  
+   `pandas` provides many methods to manipulate data in a DataFrame, including filtering, sorting, grouping, and modifying values.
+
+   - **Filtering Data**: You can filter data based on conditions.
+     ```python
+     # Select all rows where Age > 30
+     filtered_df = df[df['Age'] > 30]
+     print(filtered_df)
+     ```
+
+   - **Sorting Data**: Use `sort_values()` to sort the DataFrame by one or more columns.
+     ```python
+     # Sort by Age in ascending order
+     sorted_df = df.sort_values(by='Age')
+     print(sorted_df)
+     ```
+
+   - **Modifying Data**: You can add, remove, or modify columns and rows.
+     ```python
+     # Add a new column
+     df['Salary'] = [50000, 60000, 70000]
+     print(df)
+
+     # Remove a column
+     df = df.drop('Salary', axis=1)
+     print(df)
+     ```
+
+   - **Handling Missing Data**:
+     - You can use `isnull()` to identify missing data and `dropna()` or `fillna()` to handle missing values.
+     ```python
+     # Check for missing values
+     print(df.isnull())
+
+     # Drop rows with missing values
+     df = df.dropna()
+
+     # Fill missing values with a default value
+     df = df.fillna('Unknown')
+     ```
+
+---
+
+6. **Basic Operations on DataFrames**  
+   `pandas` allows you to perform various operations on DataFrames, such as aggregation and transformation.
+
+   - **Aggregating Data**:
+     Use `groupby()` to group data by a specific column and then perform aggregation.
+     ```python
+     # Group by City and calculate average age
+     grouped_df = df.groupby('City')['Age'].mean()
+     print(grouped_df)
+     ```
+
+   - **Applying Functions**:
+     Use the `apply()` method to apply custom functions to DataFrame columns or rows.
+     ```python
+     # Apply a function to each column
+     df['Age in Months'] = df['Age'].apply(lambda x: x * 12)
+     print(df)
+     ```
+
+---
+
+7. **Visualization with pandas**  
+   `pandas` integrates with **Matplotlib** to allow for quick and easy data visualization. You can plot data directly from a DataFrame using the `plot()` method.
+
+   - **Plotting Data**:
+     ```python
+     df['Age'].plot(kind='bar')  # Bar plot
+     df['Age'].plot(kind='line')  # Line plot
+     df.plot(kind='scatter', x='Age', y='Salary')  # Scatter plot
+     ```
+
+   - **Installing Matplotlib**:
+     ```bash
+     pip install matplotlib
+     ```
+
+---
+
+#### **Exercise and Practice**
+
+1. **Exercise 1: Create a DataFrame**
+   - Create a DataFrame containing data on different countries with columns for `Country Name`, `Capital`, `Population`, and `GDP`. Add at least 5 countries and perform the following:
+     - Sort the data by `Population`.
+     - Filter out countries with a population greater than 50 million.
+     - Add a new column `GDP per capita`.
+
+2. **Exercise 2: Handling Missing Data**
+   - Create a DataFrame containing student names and their test scores. Introduce some missing values. Perform the following:
+     - Fill missing test scores with the mean score.
+     - Drop rows where the test score is missing.
+
+3. **Exercise 3: Visualize Data**
+   - Use the DataFrame created in Exercise 1 and plot a bar chart showing the population of each country.
+   - Plot a scatter plot between GDP and GDP per capita for each country.
+
+---
+
+#### **Key Concepts Recap:**
+
+- **pandas** is a powerful library for data manipulation and analysis, offering data structures like Series and DataFrame for working with structured data.
+- You can create DataFrames from various sources, filter, sort, modify, and perform aggregation operations on data.
+- **Matplotlib** integration allows for easy data visualization directly from a DataFrame.
+
+---

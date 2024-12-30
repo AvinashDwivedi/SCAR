@@ -1,0 +1,84 @@
+**Python for Beginners - Week 1, Day 1 Lecture Notes**
+
+---
+
+### **Learning Objectives**
+- Understand the scope and features of Python.
+- Recognize Python’s use cases in different domains.
+- Install Python and set up the environment for programming.
+
+---
+
+### **Course Overview**
+- **Introduction**: This course is designed to provide beginners with a strong foundation in Python programming. By the end of this course, students will be able to write Python scripts, use data structures, and implement basic algorithms.
+- **Structure**: The course spans four weeks, each focusing on a different set of skills:
+  - Week 1: Introduction and Basics
+  - Week 2: Data Structures and Functions
+  - Week 3: Modules, File Handling, and Error Handling
+  - Week 4: Advanced Topics and Final Project
+
+---
+
+### **Introduction to Python**
+
+#### **What is Python?**
+- Python is a high-level, interpreted programming language known for its simplicity and readability.
+- Created by Guido van Rossum in 1991.
+- Open-source and widely supported by an active community.
+
+#### **Key Features of Python**
+- **Simple and Easy to Learn**: Python has an English-like syntax.
+- **Versatile**: Used in web development, data science, AI, machine learning, automation, and more.
+- **Cross-Platform**: Runs on Windows, macOS, Linux, etc.
+- **Rich Library Support**: Offers extensive libraries for various tasks.
+
+#### **Popular Use Cases**
+- **Web Development**: Frameworks like Django and Flask.
+- **Data Science and Machine Learning**: Libraries such as pandas, NumPy, and TensorFlow.
+- **Automation**: Writing scripts to automate repetitive tasks.
+- **Game Development**: Libraries like Pygame.
+
+---
+
+### **Setting Up Python**
+
+#### **Installation Options**
+- **Anaconda**: A distribution for Python and R, ideal for data science and machine learning.
+- **IDLE**: The default Python IDE.
+- **VS Code**: A lightweight editor with Python support via extensions.
+
+#### **Steps to Install Python (Using Anaconda)**
+1. Download Anaconda from the [official website](https://www.anaconda.com/products/distribution).
+2. Run the installer and follow the on-screen instructions.
+3. Verify the installation:
+   - Open the Anaconda Navigator.
+   - Launch Jupyter Notebook or Spyder to start coding.
+
+#### **Setting Up Your First Python Program**
+1. Open a Python editor (IDLE, VS Code, or Jupyter Notebook).
+2. Write the following code:
+   ```python
+   print("Hello, World!")
+   ```
+3. Run the program to see the output: `Hello, World!`
+
+---
+
+### **Additional Resources**
+- [Python Official Documentation](https://docs.python.org/3/)
+- [W3Schools Python Tutorial](https://www.w3schools.com/python/)
+- [Anaconda Installation Guide](https://docs.anaconda.com/anaconda/install/)
+
+---
+
+### **Practice Activity**
+- Install Python on your system using any of the methods described.
+- Write and execute a Python program to print your name.
+- Experiment with running the program in different environments (IDLE, VS Code, Jupyter Notebook).
+
+**Example Code:**
+```python
+# Print your name
+print("My name is Avinash")
+```
+

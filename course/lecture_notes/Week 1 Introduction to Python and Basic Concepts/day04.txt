@@ -1,0 +1,100 @@
+**Python for Beginners - Week 1, Day 4 Lecture Notes**
+
+---
+
+### **Learning Objectives**
+- Understand control flow in Python.
+- Learn to use `if`, `elif`, and `else` statements.
+- Work with logical operators.
+
+---
+
+### **Introduction to Control Flow**
+
+Control flow allows you to execute different blocks of code based on certain conditions.
+
+#### **if Statement**
+- Executes a block of code if a condition is `True`.
+  ```python
+  x = 10
+  if x > 5:
+      print("x is greater than 5")
+  ```
+
+#### **if-else Statement**
+- Executes one block of code if the condition is `True` and another block if the condition is `False`.
+  ```python
+  x = 3
+  if x > 5:
+      print("x is greater than 5")
+  else:
+      print("x is not greater than 5")
+  ```
+
+#### **if-elif-else Statement**
+- Allows for multiple conditions to be checked in sequence.
+  ```python
+  x = 7
+  if x > 10:
+      print("x is greater than 10")
+  elif x > 5:
+      print("x is greater than 5 but less than or equal to 10")
+  else:
+      print("x is 5 or less")
+  ```
+
+---
+
+### **Logical Operators**
+- Used to combine conditional statements.
+
+1. **and**: Returns `True` if both conditions are `True`.
+   ```python
+   x = 15
+   if x > 10 and x < 20:
+       print("x is between 10 and 20")
+   ```
+
+2. **or**: Returns `True` if at least one condition is `True`.
+   ```python
+   x = 5
+   if x < 10 or x > 20:
+       print("x is outside the range of 10 to 20")
+   ```
+
+3. **not**: Reverses the result of a condition.
+   ```python
+   x = False
+   if not x:
+       print("x is False")
+   ```
+
+---
+
+### **Practice Activity**
+1. Write a program that takes a number from the user and checks if it is positive, negative, or zero.
+2. Create a program that asks the user for their age and determines their life stage (e.g., child, teenager, adult, senior).
+
+**Example Code:**
+```python
+# Check if a number is positive, negative, or zero
+num = int(input("Enter a number: "))
+if num > 0:
+    print("The number is positive.")
+elif num < 0:
+    print("The number is negative.")
+else:
+    print("The number is zero.")
+
+# Determine life stage based on age
+age = int(input("Enter your age: "))
+if age < 13:
+    print("You are a child.")
+elif age < 20:
+    print("You are a teenager.")
+elif age < 65:
+    print("You are an adult.")
+else:
+    print("You are a senior.")
+```
+

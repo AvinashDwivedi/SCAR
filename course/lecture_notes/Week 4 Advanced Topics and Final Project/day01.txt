@@ -1,0 +1,202 @@
+### **Python for Beginners**  
+#### **Week 4: Advanced Topics and Final Project**  
+---
+
+### **Day 1: Introduction to Object-Oriented Programming (OOP)**
+
+---
+
+#### **Topics Covered:**
+
+1. **What is Object-Oriented Programming (OOP)?**
+   - **Definition**: Object-Oriented Programming (OOP) is a programming paradigm that organizes software design around **objects**, rather than functions and logic. Each object is an instance of a class, and it represents both data and behavior.
+   - **Core Concepts**:
+     - **Class**: A blueprint for creating objects. It defines the properties (attributes) and methods (functions) that the objects of the class will have.
+     - **Object**: An instance of a class. It has the attributes and methods defined by the class.
+     - **Encapsulation**: The concept of bundling data and methods that operate on the data within one unit (class), and restricting access to some of the object's components. This is typically done using private and public access modifiers.
+     - **Abstraction**: Hiding complex implementation details and showing only the essential features of an object.
+     - **Inheritance**: The mechanism by which one class can inherit the attributes and methods of another class, allowing for code reuse and the creation of more specialized classes.
+     - **Polymorphism**: The ability of different classes to be treated as instances of the same class through a common interface. It also refers to methods that can behave differently based on the object calling them.
+
+---
+
+2. **Creating Classes and Objects**
+
+   - **Defining a Class**:
+     A class is defined using the `class` keyword, followed by the class name and a colon. Inside the class, we define attributes (variables) and methods (functions) that define the behavior of the objects of that class.
+
+     ```python
+     class Dog:
+         # Attributes (also called properties)
+         species = "Canine"  # Class attribute (shared by all instances)
+
+         def __init__(self, name, age):  # Constructor method (__init__)
+             self.name = name  # Instance attribute
+             self.age = age    # Instance attribute
+
+         # Method (function defined inside a class)
+         def bark(self):
+             return f"{self.name} says Woof!"
+     ```
+
+   - **Creating Objects**:
+     Once we define a class, we can create objects (instances) of that class by calling the class name as if it were a function.
+
+     ```python
+     # Creating objects (instances) of the Dog class
+     dog1 = Dog("Buddy", 3)
+     dog2 = Dog("Bella", 2)
+
+     print(dog1.name)  # Output: Buddy
+     print(dog2.bark())  # Output: Bella says Woof!
+     ```
+
+   - **The `__init__` Method**:
+     The `__init__` method is a special method called a **constructor** that is automatically invoked when a new object is created. It allows us to initialize attributes with values when creating an object.
+
+---
+
+3. **Instance Variables and Class Variables**
+   
+   - **Instance Variables**: These are variables that belong to a particular instance (object) of a class. They are defined within the `__init__` method using `self`.
+   
+     Example:
+     ```python
+     class Car:
+         def __init__(self, make, model, year):
+             self.make = make      # Instance variable
+             self.model = model    # Instance variable
+             self.year = year      # Instance variable
+     ```
+
+   - **Class Variables**: These are variables that are shared by all instances of the class. They are defined outside of the `__init__` method.
+
+     Example:
+     ```python
+     class Car:
+         wheels = 4  # Class variable (same for all cars)
+
+         def __init__(self, make, model, year):
+             self.make = make
+             self.model = model
+             self.year = year
+
+     car1 = Car("Toyota", "Corolla", 2020)
+     car2 = Car("Honda", "Civic", 2021)
+     print(car1.wheels)  # Output: 4
+     print(car2.wheels)  # Output: 4
+     ```
+
+---
+
+4. **Methods in Classes**
+
+   - **Instance Methods**: Methods that operate on instance variables and are called on an instance of the class. These methods take `self` as the first parameter.
+
+     Example:
+     ```python
+     class Person:
+         def __init__(self, name, age):
+             self.name = name
+             self.age = age
+
+         def greet(self):
+             print(f"Hello, my name is {self.name} and I am {self.age} years old.")
+     
+     p1 = Person("Alice", 25)
+     p1.greet()  # Output: Hello, my name is Alice and I am 25 years old.
+     ```
+
+   - **Class Methods**: These methods operate on class variables and are marked with a `@classmethod` decorator. The first parameter is `cls` (which refers to the class, not the instance).
+   
+     Example:
+     ```python
+     class Book:
+         books_count = 0  # Class variable
+
+         def __init__(self, title, author):
+             self.title = title
+             self.author = author
+             Book.books_count += 1  # Increment the count of books created
+
+         @classmethod
+         def get_books_count(cls):
+             return cls.books_count
+
+     b1 = Book("1984", "George Orwell")
+     b2 = Book("To Kill a Mockingbird", "Harper Lee")
+     print(Book.get_books_count())  # Output: 2
+     ```
+
+   - **Static Methods**: These methods don't take `self` or `cls` as the first parameter and are used when the method doesn't need to access or modify the class or instance data. Static methods are defined with a `@staticmethod` decorator.
+     
+     Example:
+     ```python
+     class Math:
+         @staticmethod
+         def add(a, b):
+             return a + b
+     
+     print(Math.add(3, 4))  # Output: 7
+     ```
+
+---
+
+5. **Inheritance in Python**
+
+   - **Inheritance** allows one class (the child class) to inherit the attributes and methods of another class (the parent class). This enables code reuse and the creation of specialized classes.
+
+   Example:
+   ```python
+   class Animal:
+       def __init__(self, name):
+           self.name = name
+
+       def speak(self):
+           return f"{self.name} makes a sound."
+
+   class Dog(Animal):  # Dog class inherits from Animal class
+       def speak(self):
+           return f"{self.name} barks."
+
+   dog = Dog("Buddy")
+   print(dog.speak())  # Output: Buddy barks.
+   ```
+
+   - **`super()` function**: The `super()` function allows us to call a method from the parent class.
+     ```python
+     class Cat(Animal):
+         def __init__(self, name, color):
+             super().__init__(name)  # Call parent class's __init__ method
+             self.color = color
+
+         def speak(self):
+             return f"{self.name} meows."
+
+     cat = Cat("Whiskers", "gray")
+     print(cat.speak())  # Output: Whiskers meows.
+     ```
+
+---
+
+#### **Exercise and Practice**
+
+- **Exercise 1: Create a Class**
+   - Create a class `Book` with attributes for the title, author, and year of publication. Add methods to display the book information and check if the book is a classic (published before 1980).
+   
+- **Exercise 2: Inheritance**
+   - Create a `Vehicle` class with a method `start_engine`. Then create a `Car` class and a `Motorcycle` class that inherit from `Vehicle` and add their own unique methods, such as `drive()` for `Car` and `ride()` for `Motorcycle`.
+
+- **Exercise 3: Polymorphism**
+   - Create a `Shape` class with a method `area()` and two child classes, `Rectangle` and `Circle`. Implement the `area()` method in both child classes to calculate the area for each shape. Demonstrate polymorphism by creating a list of shapes and calculating their areas.
+
+---
+
+#### **Key Concepts Recap:**
+
+- **OOP** allows us to structure programs in terms of objects and classes.
+- **Encapsulation**: Bundle data and methods together.
+- **Inheritance**: Allow classes to inherit functionality from other classes.
+- **Polymorphism**: Allow objects of different classes to be treated as objects of a common superclass.
+
+---

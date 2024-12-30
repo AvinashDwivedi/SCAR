@@ -1,0 +1,177 @@
+### **Python for Beginners**  
+#### **Week 4: Advanced Topics and Final Project**  
+---
+
+### **Day 2: Inheritance and Polymorphism in Python**
+
+---
+
+#### **Topics Covered:**
+
+1. **Inheritance in Python**  
+   - **Definition**: Inheritance is a feature in Object-Oriented Programming (OOP) where one class (the **child** or **subclass**) can inherit attributes and methods from another class (the **parent** or **superclass**). This allows for **code reuse** and the creation of more specialized classes based on a common base class.
+   
+   - **Basic Syntax of Inheritance**:
+     - The child class inherits from the parent class by passing the parent class name in parentheses.
+     ```python
+     class ParentClass:
+         def __init__(self):
+             self.parent_attribute = "I am a parent attribute"
+
+         def parent_method(self):
+             print("I am a parent method")
+
+     class ChildClass(ParentClass):  # Child class inherits from ParentClass
+         def __init__(self):
+             super().__init__()  # Call parent class constructor
+             self.child_attribute = "I am a child attribute"
+
+         def child_method(self):
+             print("I am a child method")
+     ```
+
+   - **Example: Basic Inheritance**:
+     ```python
+     class Animal:
+         def __init__(self, name):
+             self.name = name
+         
+         def speak(self):
+             return f"{self.name} makes a sound"
+
+     class Dog(Animal):
+         def __init__(self, name, breed):
+             super().__init__(name)  # Call parent constructor
+             self.breed = breed
+
+         def speak(self):  # Overriding the parent class method
+             return f"{self.name} barks"
+
+     dog = Dog("Buddy", "Golden Retriever")
+     print(dog.speak())  # Output: Buddy barks
+     ```
+
+2. **The `super()` Function**
+   - **Definition**: The `super()` function allows you to call methods from a parent class inside a child class. It is particularly useful when overriding methods in the child class and still needing to call the method from the parent class.
+   
+   - **Example**:
+     ```python
+     class Animal:
+         def __init__(self, name):
+             self.name = name
+
+         def speak(self):
+             return f"{self.name} makes a sound"
+
+     class Dog(Animal):
+         def __init__(self, name, breed):
+             super().__init__(name)  # Call the parent class's __init__ method
+             self.breed = breed
+
+         def speak(self):
+             parent_message = super().speak()  # Call parent class's speak method
+             return f"{parent_message}, but also barks"
+
+     dog = Dog("Buddy", "Golden Retriever")
+     print(dog.speak())  # Output: Buddy makes a sound, but also barks
+     ```
+
+3. **Method Overriding**
+   - **Definition**: Method overriding occurs when a child class provides its own implementation of a method that is already defined in the parent class. The new method in the child class replaces the inherited method.
+   
+   - **Example**: In the previous example, `speak()` is overridden in the `Dog` class to provide a behavior specific to dogs, rather than the generic behavior of animals.
+   
+4. **Polymorphism in Python**  
+   - **Definition**: Polymorphism allows objects of different classes to be treated as instances of the same class. It also allows methods to be used interchangeably, even if the method behavior differs in each class. This is possible due to method overriding and method overloading.
+   
+   - **Types of Polymorphism**:
+     1. **Compile-time Polymorphism (Method Overloading)**: Not directly supported in Python, as Python does not allow multiple methods with the same name but different parameters.
+     2. **Run-time Polymorphism (Method Overriding)**: Achieved when a subclass overrides a method in the parent class.
+   
+   - **Example of Polymorphism**:
+     ```python
+     class Animal:
+         def speak(self):
+             return "Animal speaks"
+
+     class Dog(Animal):
+         def speak(self):
+             return "Dog barks"
+
+     class Cat(Animal):
+         def speak(self):
+             return "Cat meows"
+
+     # Polymorphism in action
+     animals = [Dog(), Cat()]
+     for animal in animals:
+         print(animal.speak())  # Output: Dog barks, Cat meows
+     ```
+
+   - **Polymorphism with `super()`**:
+     When using the `super()` function in a method that is overridden, polymorphism allows you to access both the parent and child class methods.
+
+     Example:
+     ```python
+     class Animal:
+         def speak(self):
+             return "Animal speaks"
+
+     class Dog(Animal):
+         def speak(self):
+             return super().speak() + " and Dog barks"
+
+     dog = Dog()
+     print(dog.speak())  # Output: Animal speaks and Dog barks
+     ```
+
+5. **Multiple Inheritance**  
+   - **Definition**: In Python, a class can inherit from more than one parent class. This is called **multiple inheritance**. When using multiple inheritance, Python will use a method resolution order (MRO) to determine which class’s method to call.
+   
+   - **Example of Multiple Inheritance**:
+     ```python
+     class Animal:
+         def speak(self):
+             return "Animal speaks"
+
+     class Dog:
+         def wag_tail(self):
+             return "Dog wags its tail"
+
+     class DogAnimal(Animal, Dog):
+         def __init__(self, name):
+             self.name = name
+
+     dog_animal = DogAnimal("Buddy")
+     print(dog_animal.speak())  # Output: Animal speaks
+     print(dog_animal.wag_tail())  # Output: Dog wags its tail
+     ```
+
+   - **Method Resolution Order (MRO)**: Python uses an algorithm called C3 linearization to determine the order in which base classes are called. You can view the MRO of a class using the `mro()` method:
+     ```python
+     print(DogAnimal.mro())
+     ```
+
+---
+
+#### **Exercise and Practice**
+
+1. **Exercise 1: Implement Inheritance**
+   - Create a `Vehicle` class with an attribute `model` and a method `move()`. Then, create a `Car` class and a `Bike` class that inherit from `Vehicle`. Implement a `move()` method in both the `Car` and `Bike` classes to describe how each vehicle moves.
+
+2. **Exercise 2: Use Polymorphism**
+   - Create a `Shape` class with an `area()` method. Then create two classes, `Rectangle` and `Circle`, that inherit from `Shape` and override the `area()` method. Demonstrate polymorphism by creating a list of shapes and calculating their areas.
+
+3. **Exercise 3: Multiple Inheritance**
+   - Create a `Person` class with a `name` attribute, and an `Employee` class with a `salary` attribute. Then, create a `Manager` class that inherits from both `Person` and `Employee`. Add a method `display_info()` to the `Manager` class that prints the manager’s name and salary.
+
+---
+
+#### **Key Concepts Recap:**
+
+- **Inheritance** allows one class to inherit properties and methods from another, leading to code reuse and the creation of specialized classes.
+- **Method Overriding** lets a subclass redefine a method from its parent class.
+- **Polymorphism** allows methods to be used interchangeably, even if they behave differently based on the object type.
+- **Multiple Inheritance** allows a class to inherit from multiple parent classes, with Python handling method resolution order (MRO) automatically.
+
+---

@@ -1,0 +1,130 @@
+### **Python for Beginners**  
+#### **Week 3: Modules, File Handling, and Error Handling**  
+---
+
+### **Day 2: File Handling in Python**
+
+---
+
+#### **Topics Covered:**
+
+1. **Introduction to File Handling**
+   - **Definition**: File handling in Python allows you to work with files — read from them, write to them, and manipulate them (create, delete, etc.).
+   - **Why Use File Handling**: Reading and writing files is an essential aspect of many programs, especially when dealing with large datasets, user-generated data, or persistent storage.
+   - **File Modes**: When opening a file in Python, you can specify the mode, which determines the type of access you have to the file. Some common file modes are:
+     - `'r'`: Read (default mode). Opens a file for reading only. The file must exist.
+     - `'w'`: Write. Opens a file for writing. If the file already exists, it will be overwritten.
+     - `'a'`: Append. Opens a file for writing, but does not overwrite it. Data is appended to the end.
+     - `'x'`: Exclusive creation. Creates a new file, but fails if the file already exists.
+     - `'b'`: Binary mode. Used to read or write binary files.
+     - `'t'`: Text mode (default).
+
+2. **Opening a File**
+   - Python provides the `open()` function to open a file and work with it. The function takes two arguments: the file name and the mode.
+     ```python
+     # Opening a file in read mode
+     file = open('example.txt', 'r')
+     ```
+   - **Context Manager (`with` statement)**: It's recommended to use the `with` statement when opening files. It automatically closes the file once the block of code is executed, even if an error occurs.
+     ```python
+     with open('example.txt', 'r') as file:
+         content = file.read()
+         print(content)
+     ```
+
+3. **Reading Files**
+   - There are several methods for reading from a file:
+     - **`read()`**: Reads the entire contents of the file.
+       ```python
+       with open('example.txt', 'r') as file:
+           content = file.read()
+           print(content)
+       ```
+     - **`readline()`**: Reads one line from the file at a time.
+       ```python
+       with open('example.txt', 'r') as file:
+           line = file.readline()
+           print(line)
+       ```
+     - **`readlines()`**: Reads all lines in the file and returns them as a list of strings.
+       ```python
+       with open('example.txt', 'r') as file:
+           lines = file.readlines()
+           for line in lines:
+               print(line)
+       ```
+
+4. **Writing to Files**
+   - To write data to a file, you can use the `write()` or `writelines()` methods:
+     - **`write()`**: Writes a string to a file. If the file is in write mode (`'w'` or `'a'`), it will overwrite or append to the file.
+       ```python
+       with open('output.txt', 'w') as file:
+           file.write("Hello, this is a test.\n")
+       ```
+     - **`writelines()`**: Writes a list of strings to a file.
+       ```python
+       lines = ["Hello, World!\n", "This is Python file handling.\n"]
+       with open('output.txt', 'w') as file:
+           file.writelines(lines)
+       ```
+
+5. **File Closing**
+   - It is important to close a file after you're done with it. When using the `with` statement, this happens automatically. However, if you open a file without it, you need to manually close it using `file.close()`.
+     ```python
+     file = open('example.txt', 'r')
+     content = file.read()
+     print(content)
+     file.close()  # Always close the file when done
+     ```
+
+6. **Handling File Errors**
+   - **FileNotFoundError**: Raised when trying to open a file that doesn't exist (in read mode).
+   - **IOError**: Raised for input/output issues (e.g., permissions problems).
+   - You can handle these exceptions using `try` and `except` blocks:
+     ```python
+     try:
+         with open('nonexistent_file.txt', 'r') as file:
+             content = file.read()
+     except FileNotFoundError:
+         print("File not found!")
+     except IOError:
+         print("An error occurred while handling the file.")
+     ```
+
+---
+
+#### **Examples and Exercises**
+
+- **Exercise 1: Reading from a File**
+   - Write a program that opens a text file, reads its contents, and prints it to the console.
+   
+- **Exercise 2: Writing to a File**
+   - Write a program that creates a new text file (if it doesn't already exist) and writes some content to it. After writing, read the file to verify the content was saved.
+
+- **Exercise 3: Reading and Processing a File**
+   - Create a program that reads a file containing a list of names (one per line) and prints each name with the first letter capitalized.
+
+- **Exercise 4: Appending to a File**
+   - Write a program that appends data to an existing file without overwriting the current content. Use the append mode (`'a'`).
+
+- **Exercise 5: Handling File Errors**
+   - Write a program that attempts to read a file. If the file does not exist, it should catch the `FileNotFoundError` and print an appropriate message.
+
+---
+
+#### **Key Concepts Summary:**
+
+- **File Handling**: Reading from and writing to files is essential in many programs.
+- **Common Methods**: `open()`, `read()`, `readline()`, `readlines()`, `write()`, `writelines()`, `close()`.
+- **Modes**: Different file modes (`'r'`, `'w'`, `'a'`, `'x'`) determine how you can interact with a file.
+- **Context Manager** (`with`): Automatically handles file opening and closing, making the code cleaner and safer.
+- **Error Handling**: Use `try`/`except` blocks to handle potential file errors such as missing files.
+
+---
+
+#### **Further Practice**
+
+- **Task 1**: Create a program that reads a file containing numerical data, calculates the average, and writes the result to a new file.
+- **Task 2**: Build a simple contact book program that stores name and phone number pairs in a text file. The program should allow adding new contacts, displaying existing contacts, and deleting contacts.
+
+---

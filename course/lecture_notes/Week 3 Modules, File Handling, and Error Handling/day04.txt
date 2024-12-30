@@ -1,0 +1,190 @@
+### **Python for Beginners**  
+#### **Week 3: Modules, File Handling, and Error Handling**  
+---
+
+### **Day 4: Build a To-Do List App**
+
+---
+
+#### **Topics Covered:**
+
+1. **Overview of the To-Do List Application**
+   - In this lesson, we will create a simple **To-Do List** app using Python that will allow users to:
+     - Add tasks.
+     - View tasks.
+     - Mark tasks as completed.
+     - Delete tasks.
+     - Save tasks to a file for persistence (i.e., tasks should remain even after closing the application).
+   - **Goal**: To practice using file handling, basic data structures, and functions in Python while building a useful, interactive application.
+
+---
+
+#### **Design of the To-Do List App**
+
+1. **Basic Features**:
+   - **Add Task**: User can add a new task.
+   - **View Tasks**: Display all tasks with status (completed or not).
+   - **Mark as Completed**: Mark a task as completed.
+   - **Delete Task**: Delete a task from the list.
+   - **Save and Load Tasks**: Store tasks in a file so they persist between sessions.
+
+2. **Data Structure**:
+   - We will use a **list of dictionaries** to store tasks, where each dictionary contains:
+     - `task`: The task description.
+     - `completed`: A boolean (True or False) indicating whether the task is completed.
+     ```python
+     tasks = [
+         {'task': 'Buy groceries', 'completed': False},
+         {'task': 'Read a book', 'completed': False},
+     ]
+     ```
+
+---
+
+#### **Step-by-Step Implementation**
+
+1. **Define Functions for Each Task**
+
+   - **Add a Task**: Function to add a new task to the list.
+     ```python
+     def add_task(tasks, task_description):
+         task = {'task': task_description, 'completed': False}
+         tasks.append(task)
+     ```
+
+   - **View Tasks**: Function to display all tasks.
+     ```python
+     def view_tasks(tasks):
+         if not tasks:
+             print("No tasks in the list.")
+         for idx, task in enumerate(tasks, 1):
+             status = 'Completed' if task['completed'] else 'Pending'
+             print(f"{idx}. {task['task']} - {status}")
+     ```
+
+   - **Mark Task as Completed**: Function to mark a task as completed.
+     ```python
+     def complete_task(tasks, task_id):
+         if 0 < task_id <= len(tasks):
+             tasks[task_id - 1]['completed'] = True
+             print(f"Task {task_id} marked as completed.")
+         else:
+             print("Invalid task ID.")
+     ```
+
+   - **Delete Task**: Function to delete a task.
+     ```python
+     def delete_task(tasks, task_id):
+         if 0 < task_id <= len(tasks):
+             removed_task = tasks.pop(task_id - 1)
+             print(f"Task '{removed_task['task']}' has been deleted.")
+         else:
+             print("Invalid task ID.")
+     ```
+
+2. **Saving and Loading Tasks to/from a File**
+
+   - **Saving Tasks**: Write the tasks to a file (`tasks.txt`) in a format that can be read back later. We'll use Python's **pickle** module to serialize the tasks into a binary format and store them.
+     ```python
+     import pickle
+
+     def save_tasks(tasks, filename="tasks.pkl"):
+         with open(filename, 'wb') as file:
+             pickle.dump(tasks, file)
+         print("Tasks saved successfully.")
+     ```
+
+   - **Loading Tasks**: Read the tasks from the file and load them into the program.
+     ```python
+     def load_tasks(filename="tasks.pkl"):
+         try:
+             with open(filename, 'rb') as file:
+                 tasks = pickle.load(file)
+             return tasks
+         except FileNotFoundError:
+             print("No saved tasks found. Starting with an empty task list.")
+             return []
+     ```
+
+3. **Menu and Main Application Loop**
+   - The program will display a simple text-based menu where the user can choose an option (Add, View, Complete, Delete, Save, Exit).
+   - After completing an action, the program will prompt the user for further actions until they choose to exit.
+     ```python
+     def display_menu():
+         print("\nTo-Do List Application")
+         print("1. Add Task")
+         print("2. View Tasks")
+         print("3. Mark Task as Completed")
+         print("4. Delete Task")
+         print("5. Save Tasks")
+         print("6. Exit")
+
+     def main():
+         tasks = load_tasks()  # Load tasks from file at the start
+         
+         while True:
+             display_menu()
+             choice = input("Choose an option (1-6): ")
+             
+             if choice == "1":
+                 task_desc = input("Enter task description: ")
+                 add_task(tasks, task_desc)
+             elif choice == "2":
+                 view_tasks(tasks)
+             elif choice == "3":
+                 task_id = int(input("Enter task ID to mark as completed: "))
+                 complete_task(tasks, task_id)
+             elif choice == "4":
+                 task_id = int(input("Enter task ID to delete: "))
+                 delete_task(tasks, task_id)
+             elif choice == "5":
+                 save_tasks(tasks)
+             elif choice == "6":
+                 save_tasks(tasks)  # Save before exiting
+                 print("Exiting program...")
+                 break
+             else:
+                 print("Invalid choice. Please select a valid option.")
+     ```
+
+4. **Run the Application**: 
+   - To run the program, call the `main()` function:
+     ```python
+     if __name__ == "__main__":
+         main()
+     ```
+
+---
+
+#### **Key Features of the To-Do List App**
+
+- **Persistent Data**: Tasks are saved to a file (`tasks.pkl`) and can be reloaded each time the program starts.
+- **Interactive User Interface**: Simple text-based interface using a menu system.
+- **Basic Operations**: The user can add tasks, view tasks, mark them as completed, delete tasks, and save their progress.
+
+---
+
+#### **Exercise and Further Practice**
+
+- **Exercise 1: Modify the To-Do List App**
+   - Add an additional feature to the app that allows the user to update the description of a task (i.e., change the task text).
+   - Implement a way to sort tasks by their completion status (e.g., show all completed tasks first).
+   
+- **Exercise 2: Implement a Deadline Feature**
+   - Modify the app so that each task has a deadline (a date) that the user can input when adding a task.
+   - Display tasks along with their deadlines, and highlight overdue tasks.
+
+- **Exercise 3: Add a Priority Level to Tasks**
+   - Enhance the app by allowing the user to set priority levels for tasks (e.g., Low, Medium, High).
+   - Display tasks sorted by priority, showing the highest priority tasks first.
+
+---
+
+#### **Key Concepts Recap:**
+
+- **File Handling**: Saving and loading data to and from files (using `pickle` for serialization).
+- **Data Structures**: Using a list of dictionaries to manage tasks and their attributes.
+- **Functions**: Organizing code into functions for modularity and reusability.
+- **User Interaction**: Building a simple text-based interface for the user to interact with the program.
+
+---

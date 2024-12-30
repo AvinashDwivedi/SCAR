@@ -1,0 +1,92 @@
+**Python for Beginners - Week 1, Day 3 Lecture Notes**
+
+---
+
+### **Learning Objectives**
+- Learn how to take input from the user and display output.
+- Understand type conversion in Python.
+
+---
+
+### **Input and Output in Python**
+
+#### **Input Function**
+- Used to take input from the user.
+- Returns data as a string.
+  ```python
+  name = input("What is your name? ")
+  print("Hello, " + name + "!")
+  ```
+
+#### **Output Function**
+- Use `print()` to display output.
+  ```python
+  print("Welcome to Python programming!")
+  ```
+- You can combine strings and variables in the output using `f-strings`:
+  ```python
+  age = 25
+  print(f"You are {age} years old.")
+  ```
+
+---
+
+### **Type Conversion**
+
+#### **Why Type Conversion is Important**
+- Input data is always treated as a string.
+- Conversion is required when performing operations on different data types.
+
+#### **Common Conversion Functions**
+1. `int()`: Converts to an integer.
+   ```python
+   age = int(input("Enter your age: "))
+   print(age + 5)
+   ```
+2. `float()`: Converts to a float.
+   ```python
+   price = float(input("Enter the price: "))
+   print(price * 2)
+   ```
+3. `str()`: Converts to a string.
+   ```python
+   num = 10
+   print("The number is " + str(num))
+   ```
+4. `bool()`: Converts to a boolean.
+   ```python
+   active = bool(1)
+   print(active)  # True
+   ```
+
+---
+
+### **Practice Activity**
+1. Write a program to ask the user for their birth year, calculate their age, and display it.
+2. Create a basic calculator that takes two numbers and an operator (+, -, *, /) as input and displays the result.
+
+**Example Code:**
+```python
+# Calculate age
+birth_year = int(input("Enter your birth year: "))
+current_year = 2024
+age = current_year - birth_year
+print(f"You are {age} years old.")
+
+# Basic calculator
+num1 = float(input("Enter the first number: "))
+num2 = float(input("Enter the second number: "))
+operator = input("Enter an operator (+, -, *, /): ")
+
+if operator == "+":
+    print("Result:", num1 + num2)
+elif operator == "-":
+    print("Result:", num1 - num2)
+elif operator == "*":
+    print("Result:", num1 * num2)
+elif operator == "/":
+    print("Result:", num1 / num2)
+else:
+    print("Invalid operator")
+```
+

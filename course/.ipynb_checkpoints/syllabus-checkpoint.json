@@ -1,0 +1,147 @@
+{
+    "Python for Beginners": {
+      "Week 1 Introduction to Python and Basic Concepts": {
+        "day01": {
+          "Topics": [
+            "Course Overview",
+            "Introduction to Python: Features, Use Cases, and Installation",
+            "Setting up Python (Anaconda/IDLE/VS Code)"
+          ]
+        },
+        "day02": {
+          "Topics": [
+            "Python Syntax: Indentation, Comments, and Basic Operations",
+            "Variables and Data Types (int, float, str, bool)"
+          ]
+        },
+        "day03": {
+          "Topics": [
+            "Input and Output in Python",
+            "Type Conversion"
+          ],
+          "Exercises": "Basic Calculator"
+        },
+        "day04": {
+          "Topics": [
+            "Introduction to Control Flow",
+            "if, elif, else statements",
+            "Logical Operators"
+          ]
+        },
+        "day05": {
+          "Topics": [
+            "Loops: for and while",
+            "Break, Continue, and Pass"
+          ],
+          "Exercises": "Simple Pattern Printing"
+        }
+      },
+      "Week 2 Data Structures and Functions": {
+        "day01": {
+          "Topics": [
+            "Strings",
+            "String Operations",
+            "Slicing and String Methods"
+          ]
+        },
+        "day02": {
+          "Topics": [
+            "Lists",
+            "Creating and Manipulating Lists",
+            "List Comprehension"
+          ]
+        },
+        "day03": {
+          "Topics": [
+            "Tuples and Dictionaries",
+            "Accessing and Updating Elements",
+            "Dictionary Methods"
+          ]
+        },
+        "day04": {
+          "Topics": [
+            "Sets",
+            "Set Operations",
+            "Applications of Sets"
+          ]
+        },
+        "day05": {
+          "Topics": [
+            "Functions",
+            "Defining and Calling Functions",
+            "Arguments and Return Values"
+          ]
+        }
+      },
+      "Week 3 Modules, File Handling, and Error Handling": {
+        "day01": {
+          "Topics": [
+            "Modules and Libraries",
+            "Importing Modules",
+            "Popular Libraries for Beginners (math, random, datetime)"
+          ]
+        },
+        "day02": {
+          "Topics": [
+            "File Handling",
+            "Reading and Writing Files (txt and csv)",
+            "Handling File Modes"
+          ]
+        },
+        "day03": {
+          "Topics": [
+            "Exception Handling",
+            "try, except, finally",
+            "Raising Exceptions"
+          ]
+        },
+        "day04": {
+          "Exercises": "Build a To-Do List App"
+        },
+        "day05": {
+          "Activities": [
+            "Mid-Course Quiz",
+            "Revision"
+          ]
+        }
+      },
+      "Week 4 Advanced Topics and Final Project": {
+        "day01": {
+          "Topics": [
+            "Object-Oriented Programming (OOP)",
+            "Classes and Objects",
+            "Methods and Attributes"
+          ]
+        },
+        "day02": {
+          "Topics": [
+            "OOP Continued",
+            "Inheritance and Polymorphism"
+          ]
+        },
+        "day03": {
+          "Topics": [
+            "Introduction to Python Libraries for Data Handling",
+            "pandas Basics",
+            "Reading and Manipulating DataFrames"
+          ]
+        },
+        "day04": {
+          "Activities": [
+            "Final Project Planning"
+          ],
+          "Project Ideas": [
+            "A Simple Calculator with GUI (Tkinter)",
+            "A Basic Expense Tracker"
+          ]
+        },
+        "day05": {
+          "Activities": [
+            "Final Project Submission and Presentation",
+            "Course Wrap-Up and Feedback"
+          ]
+        }
+      }
+    }
+  }
+  
