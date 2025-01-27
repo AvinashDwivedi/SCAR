@@ -1,4 +1,9 @@
-from flask import Flask, render_template, request, jsonify
+import os
+import uuid
+from pptx import Presentation
+from pptx.util import Pt, Inches
+import textwrap
+from flask import Flask, render_template, request, jsonify, send_file
 import json
 from flask_cors import CORS
 from openai import OpenAI
@@ -27,6 +32,25 @@ def chat_with_gpt(prompt, type=None):
             return response.choices[0].message.content
     except Exception as e:
         return f"Error: {e}"
+    
+def save_string_to_file(text, filename="output.txt"):
+    """
+    Save a string to a text file.
+    
+    Parameters:
+    - text (str): The string to save.
+    - filename (str): The name of the file (default: "output.txt").
+    
+    Returns:
+    - str: Confirmation message with the file path.
+    """
+    try:
+        with open(filename, "w", encoding="utf-8") as file:
+            file.write(text)
+        return f"String saved to {filename}"
+    except Exception as e:
+        return f"An error occurred: {e}"
+
 
 # Load syllabus
 def load_syllabus():
@@ -98,6 +122,7 @@ def teach_topic():
 
     prompt = f"By going through '''{topic_content}'''. Explain the '{topic}' in simple terms suitable for a beginner."
     explanation = chat_with_gpt(prompt)
+    print(save_string_to_file(explanation, "example_output.txt"))
     return jsonify(explanation=explanation)
 
 @app.route('/chat', methods=['POST'])
@@ -172,6 +197,147 @@ def submit_quiz():
             })
 
     return jsonify(score=score, total=total, feedback=feedback)
+
+# PowerPoint Generation Function
+def create_visually_appealing_presentation(topic, slides_data, filename, max_chars_per_slide=1000):
+    """
+    Generate a visually appealing PowerPoint presentation with markdown content, 
+    handling long text by splitting it across multiple slides and ensuring proper layout.
+    """
+    def add_content_slide(prs, title, content, layout):
+        """
+        Helper function to add a content slide to the presentation.
+        Dynamically adjusts content to fit the slide.
+        """
+        slide = prs.slides.add_slide(layout)
+        slide.shapes.title.text = title
+
+        content_placeholder = slide.placeholders[1]
+
+        # Dynamically adjust font size to fit the content
+        font_size = 18  # Start with a standard font size
+        max_lines = 12  # Max lines to fit in the placeholder
+        content_lines = content.split("\n")
+
+        # If content exceeds max lines, reduce font size iteratively
+        while len(content_lines) > max_lines and font_size > 10:
+            font_size -= 1
+            max_lines += 2  # Slightly increase lines allowed as font size decreases
+
+        # Add content to placeholder with adjusted font size
+        text_frame = content_placeholder.text_frame
+        text_frame.clear()  # Clear default content
+        for line in content_lines:
+            p = text_frame.add_paragraph()
+            p.text = line
+            p.font.size = Pt(font_size)
+            p.line_spacing = Pt(font_size + 6)  # Line spacing based on font size
+
+    # Initialize the presentation
+    prs = Presentation()
+    title_slide_layout = prs.slide_layouts[0]
+    content_slide_layout = prs.slide_layouts[1]
+
+    # Add title slide
+    title_slide = prs.slides.add_slide(title_slide_layout)
+    title_slide.shapes.title.text = topic
+    subtitle = title_slide.placeholders[1]
+    subtitle.text = f"An in-depth presentation on {topic}"
+
+    # Customize title slide fonts
+    title_slide.shapes.title.text_frame.paragraphs[0].font.size = Pt(36)
+    subtitle.text_frame.paragraphs[0].font.size = Pt(20)
+    subtitle.text_frame.paragraphs[0].font.italic = True
+
+    # Add content slides
+    for slide_data in slides_data:
+        title = slide_data["title"]
+        content = slide_data["content"]
+
+        # Split content into chunks based on max_chars_per_slide
+        content_chunks = textwrap.wrap(content, max_chars_per_slide, break_long_words=False, replace_whitespace=False)
+
+        for i, chunk in enumerate(content_chunks):
+            slide_title = title if i == 0 else f"{title} (Cont.)"
+            add_content_slide(prs, slide_title, chunk, content_slide_layout)
+
+    # Save the presentation
+    try:
+        prs.save(filename)
+    except Exception as e:
+        raise IOError(f"Failed to save the presentation: {e}")
+
+
+@app.route('/generate_presentation', methods=['POST'])
+def generate_presentation():
+    data = request.json
+    informational_text = data.get("informational_text")
+    topic = data.get("topic", "Presentation")
+
+    if not informational_text or len(informational_text.strip()) < 10:
+        return jsonify(error="Informational text is required and must be meaningful."), 400
+
+    try:
+        # Generate slide titles
+        titles_prompt = f"Don't add preamble and Based on the following informational text, generate list of slide titles for a presentation separated by '\\n':\n\n{informational_text}"
+        titles_response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": titles_prompt}]
+        )
+        titles_content = titles_response.choices[0].message.content if titles_response.choices and titles_response.choices[0].message.content else None
+
+        if not titles_content:
+            return jsonify(error="Failed to generate slide titles. OpenAI response was empty or invalid."), 500
+
+        slide_titles = [line.strip() for line in titles_content.split("\n") if line.strip()]
+
+        if not slide_titles:
+            return jsonify(error="No slide titles generated. Please review the informational text."), 400
+
+        # Generate slide content
+        slides_data = []
+        for title in slide_titles:
+            content_prompt = f"Don't add preamble. Generate short content for the presentation slide titled '{title}' based on the following text:\n\n{informational_text}"
+            content_response = client.chat.completions.create(
+                model="gpt-4",
+                messages=[{"role": "user", "content": content_prompt}]
+            )
+            content = content_response.choices[0].message.content if content_response.choices and content_response.choices[0].message.content else None
+
+            if not content:
+                return jsonify(error=f"Content for slide '{title}' is empty or invalid."), 500
+
+            slides_data.append({
+                "title": title,
+                "content": content.strip()
+            })
+
+        # Generate the presentation
+        output_dir = "generated_ppt"
+        os.makedirs(output_dir, exist_ok=True)
+        unique_id = uuid.uuid4().hex
+        ppt_filename = os.path.join(output_dir, f"presentation_{unique_id}.pptx")
+        create_visually_appealing_presentation(topic, slides_data, ppt_filename)
+
+        return jsonify(message="Presentation generated successfully!", download_url=f"/download_ppt?filename=presentation_{unique_id}.pptx")
+    except Exception as e:
+        return jsonify(error=f"Failed to generate presentation: {str(e)}"), 500
+
+
+@app.route('/download_ppt', methods=['GET'])
+def download_ppt():
+    """
+    Download the generated PowerPoint presentation.
+    """
+    filename = request.args.get("filename")
+    if not filename:
+        return jsonify(error="Filename is required."), 400
+
+    filepath = os.path.join("generated_ppt", filename)
+    if not os.path.exists(filepath):
+        return jsonify(error="File not found."), 404
+
+    return send_file(filepath, as_attachment=True)
 
 if __name__ == "__main__":
     app.run(debug=True)

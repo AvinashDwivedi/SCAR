@@ -12,54 +12,91 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background: linear-gradient(to right, #74ebd5, #acb6e5);
+            color: #333;
         }
 
         .quiz-container {
             max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .quiz-question {
-            margin-bottom: 20px;
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            color: #007bff;
+        }
+
+        .quiz-question h5 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
         }
 
         .quiz-options li {
             cursor: pointer;
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-
-        .quiz-options li.selected {
-            background-color: #007bff;
-            color: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
         }
 
         .quiz-options li:hover {
-            background-color: #f1f1f1;
+            background-color: #007bff;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .quiz-options li.selected {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-submit, .btn-back {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
         }
 
         .btn-submit {
-            margin-top: 20px;
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            border: none;
+        }
+
+        .btn-submit:hover, .btn-back:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="quiz-container">
-        <h1 class="text-center" id="quiz-title">Quiz</h1>
+        <h1 id="quiz-title">Quiz</h1>
         <p id="quiz-description" class="text-center"></p>
         <div id="quiz-content">
-            <p>Loading quiz...</p>
+            <p class="text-center text-muted">Loading quiz...</p>
         </div>
-        <button class="btn btn-primary btn-submit" id="submit-quiz" style="display: none;">Submit Quiz</button>
+        <button class="btn btn-primary btn-submit mt-3" id="submit-quiz" style="display: none;">Submit Quiz</button>
+        <button class="btn btn-secondary btn-back mt-3" onclick="goBack()">Back to Course</button>
     </div>
 
     <script>
@@ -80,7 +117,7 @@
             const topic = params.get("topic");
 
             if (!course || !week || !day || !topic) {
-                quizContent.innerHTML = `<p class="text-danger">Invalid parameters. Please try again.</p>`;
+                quizContent.innerHTML = `<p class="text-danger text-center">Invalid parameters. Please try again.</p>`;
                 return;
             }
 
@@ -93,7 +130,7 @@
                     displayQuiz();
                 })
                 .catch(error => {
-                    quizContent.innerHTML = `<p class="text-danger">Error loading quiz. Please try again later.</p>`;
+                    quizContent.innerHTML = `<p class="text-danger text-center">Error loading quiz. Please try again later.</p>`;
                     console.error(error);
                 });
         });
@@ -101,7 +138,7 @@
         // Display Quiz
         function displayQuiz() {
             if (!quizData || quizData.length === 0) {
-                quizContent.innerHTML = `<p class="text-danger">No quiz data found.</p>`;
+                quizContent.innerHTML = `<p class="text-danger text-center">No quiz data found.</p>`;
                 return;
             }
 
@@ -150,8 +187,8 @@
                 .then(response => {
                     const { score, total, feedback } = response.data;
                     quizContent.innerHTML = `
-                        <h2 class="text-success">Quiz Completed!</h2>
-                        <p>Your Score: ${score} / ${total}</p>
+                        <h2 class="text-success text-center">Quiz Completed!</h2>
+                        <p class="text-center">Your Score: <strong>${score} / ${total}</strong></p>
                         <div>
                             ${feedback.map((item, index) => `
                                 <p><strong>Q${index + 1}:</strong> ${item.question}</p>
@@ -162,10 +199,15 @@
                     submitButton.style.display = "none";
                 })
                 .catch(error => {
-                    quizContent.innerHTML = `<p class="text-danger">Error submitting quiz. Please try again later.</p>`;
+                    quizContent.innerHTML = `<p class="text-danger text-center">Error submitting quiz. Please try again later.</p>`;
                     console.error(error);
                 });
         });
+
+        // Navigate back to the previous page
+        function goBack() {
+            window.history.back();
+        }
     </script>
 </body>
 
