@@ -1,5 +1,6 @@
 import os
 import uuid
+import sqlite3
 from pptx import Presentation
 from pptx.util import Pt, Inches
 import textwrap
@@ -13,6 +14,19 @@ CORS(app)  # Enables CORS for all routes by default
 
 # Initialize OpenAI client
 client = OpenAI(api_key="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")
+
+# Function to connect to SQLite
+def get_db_connection():
+    conn = sqlite3.connect("chatbot_cache.db")
+    conn.execute('''CREATE TABLE IF NOT EXISTS topic_explanations (
+                        course TEXT, 
+                        week TEXT, 
+                        day TEXT, 
+                        topic TEXT, 
+                        explanation TEXT,
+                        PRIMARY KEY (course, week, day, topic)
+                    )''')
+    return conn
 
 # Helper function to interact with GPT
 def chat_with_gpt(prompt, type=None):
@@ -118,12 +132,38 @@ def teach_topic():
     day = request.json.get("day")
     topic = request.json.get("topic")
 
-    topic_content = open(f"course/lecture_notes/{week}/{day}.txt", 'r', encoding='utf-8').read()
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Check if explanation exists in the database
+    cursor.execute("SELECT explanation FROM topic_explanations WHERE course = ? AND week = ? AND day = ? AND topic = ?", 
+                   (course, week, day, topic))
+    row = cursor.fetchone()
+
+    if row:  # If explanation is found, return cached response
+        explanation = row[0]
+        conn.close()
+        return jsonify(explanation=explanation, cached=True)
+
+    # Otherwise, generate explanation using GPT
+    topic_file_path = f"course/lecture_notes/{week}/{day}.txt"
+    
+    if not os.path.exists(topic_file_path):
+        return jsonify(error="Lecture notes file not found."), 404
+
+    with open(topic_file_path, 'r', encoding='utf-8') as file:
+        topic_content = file.read()
 
     prompt = f"By going through '''{topic_content}'''. Explain the '{topic}' in simple terms suitable for a beginner."
     explanation = chat_with_gpt(prompt)
-    print(save_string_to_file(explanation, "example_output.txt"))
-    return jsonify(explanation=explanation)
+
+    # Save the response to the database
+    cursor.execute("INSERT INTO topic_explanations (course, week, day, topic, explanation) VALUES (?, ?, ?, ?, ?)", 
+                   (course, week, day, topic, explanation))
+    conn.commit()
+    conn.close()
+
+    return jsonify(explanation=explanation, cached=False)
 
 @app.route('/chat', methods=['POST'])
 def chat():
