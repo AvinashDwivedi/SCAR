@@ -20,6 +20,7 @@ CORS(app)  # Enables CORS for all routes by default
 load_dotenv()
 # Get the API key from environment variables
 api_key = os.getenv("OPENAI_API_KEY")
+print(api_key)
 
 # Initialize OpenAI client
 client = OpenAI(api_key=api_key)
