@@ -10,13 +10,19 @@ import json
 from flask_cors import CORS
 from openai import OpenAI
 import uuid
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Required for using Flask sessions
 CORS(app)  # Enables CORS for all routes by default
 
+# Load environment variables from .env file
+load_dotenv()
+# Get the API key from environment variables
+api_key = os.getenv("OPENAI_API_KEY")
+
 # Initialize OpenAI client
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=api_key)
 
 # Function to connect to SQLite
 def get_db_connection():
