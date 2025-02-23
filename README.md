@@ -1,103 +1,103 @@
+# SCAR - Smart Course Assistant and Recommender
 
-# SCAR - Smart Course Adaptive Revision
+## Overview
+SCAR (Smart Course Assistant and Recommender) is a backend system designed to assist students and educators in managing and interacting with course content. It provides functionalities such as topic explanations, quizzes, and PowerPoint presentations generation based on course materials. The system uses OpenAI's GPT models to generate explanations and quizzes, and it manages user sessions and conversation history using SQLite.
 
-## 📖 Overview
-**SCAR (Smart Course Adaptive Revision)** is an AI-powered web application designed to revolutionize course revision. It offers personalized learning paths, predicts students' weak areas, and provides custom revision schedules through an interactive chatbot interface. SCAR aims to make studying more efficient and engaging by integrating quizzes, personalized feedback, and adaptive content delivery.
+## Features
+- **Topic Explanations**: Generate simple explanations for course topics using OpenAI's GPT models.
+- **Quizzes**: Create and submit quizzes based on course content.
+- **PowerPoint Generation**: Generate visually appealing PowerPoint presentations from course content.
+- **Session Management**: Manage user sessions and conversation history.
+- **Caching**: Cache topic explanations to reduce redundant API calls.
 
----
-
-## 🚀 Features
-- 🧠 **AI-Driven Chatbot:** Provides topic explanations, answers questions, and guides students through course material.
-- 📅 **Personalized Revision Schedules:** Creates dynamic study plans based on user preferences and progress.
-- 📝 **Interactive Quizzes:** Allows students to assess their understanding of specific topics.
-- 📊 **Progress Tracking:** Monitors student performance and adapts content accordingly.
-- 💻 **Responsive UI:** Ensures an optimal experience on desktops, tablets, and mobile devices.
-- ⚡ **Smooth User Experience:** Fast-loading pages with clean navigation and real-time chatbot interactions.
-
----
-
-## 🗂️ Project Structure
+## Project Structure
 ```
-SCAR-main/
-├── assets/             # Static assets like images, fonts, and stylesheets
-├── js/                 # JavaScript files for interactivity and API calls
-├── css/                # Stylesheets for design and responsiveness
-├── index.html          # Main interface with chatbot and course selection
-├── quiz.html           # Quiz interface with topic-specific questions
-├── README.md           # Project documentation (this file)
-└── backend/            # (If applicable) API scripts and server-side logic
+SCAR/
+│
+├── app.py                        # Main Flask application file
+├── course/                       # Directory containing course materials
+│   ├── syllabus.json            # JSON file containing course syllabus
+│   └── lecture_notes/           # Directory containing lecture notes
+│       ├── week1/               # Lecture notes for Week 1
+│       │   └── day1.txt         # Lecture notes for Day 1 of Week 1
+│       └── week2/               # Lecture notes for Week 2
+│           └── day1.txt         # Lecture notes for Day 1 of Week 2
+├── generated_ppt/               # Directory to store generated PowerPoint presentations
+├── templates/                   # Flask templates directory
+│   ├── index.html               # Home page template
+│   └── quiz.html                # Quiz page template
+├── chatbot_cache.db             # SQLite database for caching and session management
+├── .env                         # Environment variables file (e.g., OpenAI API key)
+├── requirements.txt             # Python dependencies
+└── README.md                    # Project documentation
 ```
 
----
-
-## 🛠️ Technologies Used
-- **HTML5 & CSS3:** For structure and styling.
-- **Bootstrap 5:** Provides a responsive design framework.
-- **JavaScript (ES6):** Handles dynamic elements and API interactions.
-- **Axios:** Simplifies HTTP requests to the backend.
-- **Marked.js:** Renders markdown content within the chatbot responses.
-
----
-
-## 🚀 Getting Started
-### 📦 Prerequisites
-- A modern web browser (Chrome, Firefox, Edge, etc.)
-- (Optional) A backend server if dynamic content fetching is required.
-
-### 🛠️ Installation & Setup
-1. **Clone the repository:**
+## Installation
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/SCAR-main.git
+   git clone https://github.com/AvinashDwivedi/SCAR.git
+   cd SCAR
    ```
-2. **Navigate to the project directory:**
+
+2. **Install dependencies**:
    ```bash
-   cd SCAR-main
+   pip install -r requirements.txt
    ```
-3. **Open `index.html` in your browser:**
-   - No build process required; simply double-click the file or use a live server extension.
 
----
+3. **Set up environment variables**:
+   Create a `.env` file in the root directory and add your OpenAI API key:
+   ```
+   OPENAI_API_KEY=your_openai_api_key_here
+   ```
 
-## 📝 How to Use
-1. **Select Course Details:**
-   - Use the dropdown menus to choose your course, week, day, and topic.
-   - Click **Submit** to fetch a concise explanation.
-2. **Interact with the AI Chatbot:**
-   - Type questions into the chatbox and receive instant answers.
-3. **Take a Quiz:**
-   - Press **Take Quiz** to assess your understanding of the selected topic.
-4. **Track Your Progress:**
-   - View scores and recommendations based on your quiz performance.
+4. **Run the application**:
+   ```bash
+   python app.py
+   ```
 
----
+## API Endpoints
+- **GET `/`**: Home page.
+- **GET `/get_courses`**: Get available courses.
+- **POST `/get_weeks`**: Get weeks for a selected course.
+- **POST `/get_days`**: Get days for a selected week.
+- **POST `/get_topics`**: Get topics for a selected day.
+- **POST `/teach_topic`**: Get an explanation for a selected topic.
+- **POST `/chat`**: Chat with the assistant about a topic.
+- **GET `/quiz`**: Quiz page.
+- **POST `/start_quiz`**: Start a quiz for a selected topic.
+- **POST `/submit_quiz`**: Submit quiz responses and get feedback.
+- **POST `/generate_presentation`**: Generate a PowerPoint presentation.
+- **GET `/download_ppt`**: Download the generated PowerPoint presentation.
 
-## 🎨 Design Highlights
-- Consistent color scheme with modern typography.
-- Rounded buttons, smooth animations, and user-friendly navigation.
-- Optimized layouts for mobile and desktop experiences.
+## Usage
+1. **Access the home page**:
+   Open your browser and navigate to `http://localhost:5000/`.
 
----
+2. **Select a course, week, day, and topic**:
+   Use the provided endpoints to navigate through the course structure.
 
-## 💡 Future Roadmap
-- 📈 Add advanced analytics to show detailed performance trends.
-- 🗣️ Incorporate voice-based commands and responses.
-- 🎯 Expand to include full course management and additional languages.
-- 🔔 Add notification features for upcoming quizzes and deadlines.
+3. **Get topic explanations**:
+   Use the `/teach_topic` endpoint to get explanations for selected topics.
 
----
+4. **Take quizzes**:
+   Use the `/start_quiz` and `/submit_quiz` endpoints to take and submit quizzes.
 
-## 🤝 Contributing
-We welcome contributions from the community! To contribute:
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/yourFeature`).
-3. Commit your changes (`git commit -m 'Add new feature'`).
-4. Push to the branch (`git push origin feature/yourFeature`).
-5. Open a pull request.
+5. **Generate PowerPoint presentations**:
+   Use the `/generate_presentation` endpoint to generate presentations and download them via `/download_ppt`.
 
----
+## Dependencies
+- Flask
+- Flask-CORS
+- OpenAI
+- python-dotenv
+- python-pptx
+- SQLite3
 
-## 📄 License
-This project is licensed under the MIT License. See the LICENSE file for details.
+## Contributing
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
