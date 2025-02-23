@@ -1,7 +1,7 @@
 # SCAR - Smart Course Assistant and Recommender
 
 ## Overview
-SCAR (Smart Course Assistant and Recommender) is a backend system designed to assist students and educators in managing and interacting with course content. It provides functionalities such as topic explanations, quizzes, and PowerPoint presentations generation based on course materials. The system uses OpenAI's GPT models to generate explanations and quizzes, and it manages user sessions and conversation history using SQLite.
+SCAR (Smart Course Assistant and Recommender) is a system designed to assist students and educators in managing and interacting with course content. It provides functionalities such as topic explanations, quizzes, and PowerPoint presentations generation based on course materials. The system uses OpenAI's GPT models to generate explanations and quizzes, and it manages user sessions and conversation history using SQLite.
 
 ## Features
 - **Topic Explanations**: Generate simple explanations for course topics using OpenAI's GPT models.
