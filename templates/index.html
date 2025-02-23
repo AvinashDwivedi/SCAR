@@ -191,6 +191,7 @@
 </head>
 
 <body>
+    <input type="hidden" id="session-id" value="{{ session_id }}">
     <div class="container">
         <div class="options-section">
             <h3>Options</h3>
@@ -232,14 +233,17 @@
         
         // Populate dropdowns dynamically
         document.addEventListener("DOMContentLoaded", () => {
-            axios.get('/get_courses')
-                .then(response => populateDropdown("course-dropdown", response.data.courses))
-                .catch(error => console.error('Error fetching courses:', error));
+            const sessionId = document.getElementById("session-id").value;
+
+            axios.get(`/get_courses?session_id=${sessionId}`, { headers: { 'Accept': 'application/json' } })
+            .then(response => populateDropdown("course-dropdown", response.data.courses))
+            .catch(error => console.error('Error fetching courses:', error));
+
 
             document.getElementById("course-dropdown").addEventListener("change", (event) => {
                 const selectedCourse = event.target.value;
                 if (selectedCourse) {
-                    axios.post('/get_weeks', { course: selectedCourse })
+                    axios.post('/get_weeks', { course: selectedCourse, session_id: sessionId })
                         .then(response => {
                             populateDropdown("week-dropdown", response.data.weeks);
                             document.getElementById("week-dropdown").disabled = false;
@@ -253,7 +257,7 @@
                 const selectedCourse = document.getElementById("course-dropdown").value;
 
                 if (selectedWeek && selectedCourse) {
-                    axios.post('/get_days', { course: selectedCourse, week: selectedWeek })
+                    axios.post('/get_days', { course: selectedCourse, week: selectedWeek, session_id: sessionId })
                         .then(response => {
                             populateDropdown("day-dropdown", response.data.days);
                             document.getElementById("day-dropdown").disabled = false;
@@ -268,7 +272,7 @@
                 const selectedDay = event.target.value;
 
                 if (selectedWeek && selectedCourse && selectedDay) {
-                    axios.post('/get_topics', { course: selectedCourse, week: selectedWeek, day: selectedDay })
+                    axios.post('/get_topics', { course: selectedCourse, week: selectedWeek, day: selectedDay, session_id: sessionId })
                         .then(response => {
                             populateDropdown("topic-dropdown", response.data.topics);
                             document.getElementById("topic-dropdown").disabled = false;
@@ -278,17 +282,19 @@
             });
         });
 
+
         function fetchShortExplanation() {
             const course = document.getElementById("course-dropdown").value;
             const week = document.getElementById("week-dropdown").value;
             const day = document.getElementById("day-dropdown").value;
             const topic = document.getElementById("topic-dropdown").value;
+            const sessionId = document.getElementById("session-id").value;
 
             if (course && week && day && topic) {
                 appendMarkdownMessage('user', `**Course:** ${course}\n\n**Week:** ${week}\n\n**Day:** ${day}\n\n**Topic:** ${topic}`);
 
 
-                axios.post('/teach_topic', { course, week, day, topic })
+                axios.post('/teach_topic', { course, week, day, topic, session_id: sessionId })
                     .then(response => {
                         informationalText = response.data.explanation; // Save the response
                         appendMarkdownMessage('bot', informationalText);
@@ -307,13 +313,14 @@
         }
 
         function generateAndViewPPT() {
+            const sessionId = document.getElementById("session-id").value;
             if (!informationalText) {
                 alert('No informational text available. Please fetch explanation first.');
                 return;
             }
 
             // Call the /generate_presentation endpoint
-            axios.post('/generate_presentation', { informational_text: informationalText })
+            axios.post('/generate_presentation', { informational_text: informationalText, session_id: sessionId })
                 .then(response => {
                     const downloadUrl = response.data.download_url;
 
@@ -400,12 +407,13 @@
             const week = document.getElementById("week-dropdown").value;
             const day = document.getElementById("day-dropdown").value;
             const topic = document.getElementById("topic-dropdown").value;
+            const sessionId = document.getElementById("session-id").value;
 
             if (message) {
                 appendMessage('user', message); // User message
                 appendThinkingMessage(); // Show "Bot is thinking..."
                 
-                axios.post('/chat', { message, course, week, day, topic })
+                axios.post('/chat', { message, course, week, day, topic, session_id: sessionId })
                     .then(response => {
                         removeThinkingMessage(); // Remove "Bot is thinking..."
                         appendMarkdownMessage('bot', response.data.reply); // Bot response
@@ -429,14 +437,16 @@
             const week = document.getElementById("week-dropdown").value;
             const day = document.getElementById("day-dropdown").value;
             const topic = document.getElementById("topic-dropdown").value;
+            const sessionId = document.getElementById("session-id").value;
 
             if (course && week && day && topic) {
-                const queryParams = new URLSearchParams({ course, week, day, topic }).toString();
+                const queryParams = new URLSearchParams({ course, week, day, topic,session_id: sessionId }).toString();
                 window.location.href = `/quiz?${queryParams}`;
             } else {
                 alert('Please make all selections before starting the quiz.');
             }
         }
+
     </script>
 </body>
 

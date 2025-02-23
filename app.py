@@ -2,14 +2,17 @@ import os
 import uuid
 import sqlite3
 from pptx import Presentation
+from datetime import datetime, timedelta
 from pptx.util import Pt, Inches
 import textwrap
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, session
 import json
 from flask_cors import CORS
 from openai import OpenAI
+import uuid
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)  # Required for using Flask sessions
 CORS(app)  # Enables CORS for all routes by default
 
 # Initialize OpenAI client
@@ -18,16 +21,83 @@ client = OpenAI(api_key="sk-proj-K6q6BVMB79RxHIvOJHFj2_2IDQj1y7TapFHOwOnNO9Vg4Pf
 # Function to connect to SQLite
 def get_db_connection():
     conn = sqlite3.connect("chatbot_cache.db")
-    conn.execute('''CREATE TABLE IF NOT EXISTS topic_explanations (
-                        course TEXT, 
-                        week TEXT, 
-                        day TEXT, 
-                        topic TEXT, 
-                        explanation TEXT,
-                        PRIMARY KEY (course, week, day, topic)
-                    )''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS topic_explanations (
+            course TEXT, week TEXT, day TEXT, topic TEXT, explanation TEXT,
+            PRIMARY KEY (course, week, day, topic)
+        )
+    ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS conversation_history (
+            session_id TEXT, user_message TEXT, bot_response TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS session_activity (
+            session_id TEXT PRIMARY KEY, last_active DATETIME
+        )
+    ''')
     return conn
 
+def reset_all_conversations():
+    conn = get_db_connection()
+    conn.execute("DELETE FROM conversation_history")
+    conn.execute("DELETE FROM session_activity")
+    conn.commit()
+    conn.close()
+    print("✅ All conversation buffers reset on server start.")
+
+def update_session_activity(session_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO session_activity (session_id, last_active) VALUES (?, ?)
+        ON CONFLICT(session_id) DO UPDATE SET last_active=excluded.last_active
+    ''', (session_id, datetime.utcnow()))
+    conn.commit()
+    conn.close()
+
+def clear_inactive_sessions(timeout_minutes=30):
+    cutoff_time = datetime.utcnow() - timedelta(minutes=timeout_minutes)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Find inactive sessions
+    cursor.execute('''
+        SELECT session_id FROM session_activity WHERE last_active < ?
+    ''', (cutoff_time,))
+    inactive_sessions = cursor.fetchall()
+
+    # Delete conversations and activity records
+    for (inactive_session_id,) in inactive_sessions:
+        cursor.execute('DELETE FROM conversation_history WHERE session_id = ?', (inactive_session_id,))
+        cursor.execute('DELETE FROM session_activity WHERE session_id = ?', (inactive_session_id,))
+
+    conn.commit()
+    conn.close()
+
+def save_conversation(session_id, user_message, bot_response):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO conversation_history (session_id, user_message, bot_response) VALUES (?, ?, ?)
+    ''', (session_id, user_message, bot_response))
+    conn.commit()
+    conn.close()
+
+def get_conversation_history(session_id, limit=10):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT user_message, bot_response FROM conversation_history
+        WHERE session_id = ? ORDER BY timestamp DESC LIMIT ?
+    ''', (session_id, limit))
+    history = cursor.fetchall()
+    conn.close()
+    return history[::-1]  # Return in chronological order
+
+
+    
 # Helper function to interact with GPT
 def chat_with_gpt(prompt, type=None):
     try:
@@ -78,15 +148,26 @@ syllabus_json = load_syllabus()
 
 @app.route('/')
 def home():
-    return render_template("index.html")  # Ensure the frontend HTML file is named "index.html"
+    # Generate a new session ID if not already present
+    if 'session_id' not in session:
+        session['session_id'] = str(uuid.uuid4())
+    return render_template("index.html", session_id=session['session_id'])
 
 @app.route('/get_courses', methods=['GET'])
 def get_courses():
+    session_id = request.args.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+    
     courses = get_available_courses(syllabus_json)
     return jsonify(courses=courses)
 
 @app.route('/get_weeks', methods=['POST'])
 def get_weeks():
+    session_id = request.json.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+    
     course = request.json.get("course")
     if course in syllabus_json:  # Check if the course exists in the syllabus JSON
         weeks = list(syllabus_json[course].keys())
@@ -95,6 +176,10 @@ def get_weeks():
 
 @app.route('/get_days', methods=['POST'])
 def get_days():
+    session_id = request.json.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+    
     course = request.json.get("course")
     week = request.json.get("week")
 
@@ -109,6 +194,10 @@ def get_days():
 
 @app.route('/get_topics', methods=['POST'])
 def get_topics():
+    session_id = request.json.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+    
     course = request.json.get("course")
     week = request.json.get("week")
     day = request.json.get("day")
@@ -127,6 +216,10 @@ def get_topics():
 
 @app.route('/teach_topic', methods=['POST'])
 def teach_topic():
+    session_id = request.json.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+    
     course = request.json.get("course")
     week = request.json.get("week")
     day = request.json.get("day")
@@ -167,19 +260,50 @@ def teach_topic():
 
 @app.route('/chat', methods=['POST'])
 def chat():
+    session_id = request.json.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+
     message = request.json.get("message")
+    if not message:
+        return jsonify(error="Message is required."), 400
+
+    # Clear inactive sessions and update current session
+    clear_inactive_sessions(timeout_minutes=30)
+    update_session_activity(session_id)
+
+    history = get_conversation_history(session_id)
+    history_prompt = "\n".join([f"User: {h[0]}\nBot: {h[1]}" for h in history])
+
     course = request.json.get("course")
     week = request.json.get("week")
     day = request.json.get("day")
     topic = request.json.get("topic")
+    
 
-    if not message:
-        return jsonify(error="Message is required."), 400
+    if not course or not week or not day or not topic:
+        return jsonify(error="All selections (course, week, day, topic) are required to start the quiz."), 400
 
     topic_content = open(f"course/lecture_notes/{week}/{day}.txt", 'r', encoding='utf-8').read()
-    prompt = f"By going through '''{topic_content}'''. Clear the students doubt only if it's related to it else tell them to ask relevant questions. The doubt is: {message}"
+    
+    if topic_content.strip() == "":
+        return jsonify(error="No content found for the selected topic."), 404
+
+    prompt = f"""
+    Topic {topic} from the course {course} is about:
+    {topic_content}
+    Conversation History:
+    {history_prompt}
+
+    Current User Input: {message}
+
+    Respond accordingly and don't go out of the scope of the conversation.
+    """
     reply = chat_with_gpt(prompt)
+    save_conversation(session_id, message, reply)
+
     return jsonify(reply=reply)
+
 
 @app.route('/quiz')
 def quiz_page():
@@ -187,6 +311,10 @@ def quiz_page():
 
 @app.route('/start_quiz', methods=['POST'])
 def start_quiz():
+    session_id = request.json.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+    
     course = request.json.get("course")
     week = request.json.get("week")
     day = request.json.get("day")
@@ -196,13 +324,19 @@ def start_quiz():
         return jsonify(error="All selections (course, week, day, topic) are required to start the quiz."), 400
 
     topic_content = open(f"course/lecture_notes/{week}/{day}.txt", 'r', encoding='utf-8').read()
+    
+    if topic_content.strip() == "":
+        return jsonify(error="No content found for the selected topic."), 404
 
     prompt = f'''
-    Create a short quiz with 3 multiple-choice questions and their answers
-    on the topic "{topic_content}". Present the quiz in JSON format as given here:
-    {json.load(open("quiz_template.json"))}
-    '''
+                Create a short quiz with 3 multiple-choice questions and their answers
+                on the topic "{topic_content}".
+                Hint: the quiz should not be out of the topic.
+                Present the quiz in JSON format as given here:
+                {json.load(open("quiz_template.json"))}
+                '''
     quiz_content = chat_with_gpt(prompt, type="json_object")
+
     try:
         quiz_data = json.loads(quiz_content)
     except json.JSONDecodeError:
@@ -213,6 +347,10 @@ def start_quiz():
 
 @app.route('/submit_quiz', methods=['POST'])
 def submit_quiz():
+    session_id = request.json.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+    
     responses = request.json.get("responses")
     quiz = request.json.get("quiz")
 
@@ -310,6 +448,10 @@ def create_visually_appealing_presentation(topic, slides_data, filename, max_cha
 
 @app.route('/generate_presentation', methods=['POST'])
 def generate_presentation():
+    session_id = request.json.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+    
     data = request.json
     informational_text = data.get("informational_text")
     topic = data.get("topic", "Presentation")
@@ -369,6 +511,10 @@ def download_ppt():
     """
     Download the generated PowerPoint presentation.
     """
+    session_id = request.json.get("session_id")
+    if session_id != session.get('session_id'):
+        return jsonify(error="Invalid session."), 403
+    
     filename = request.args.get("filename")
     if not filename:
         return jsonify(error="Filename is required."), 400
@@ -380,4 +526,5 @@ def download_ppt():
     return send_file(filepath, as_attachment=True)
 
 if __name__ == "__main__":
+    reset_all_conversations()
     app.run(debug=True)

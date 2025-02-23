@@ -1,0 +1,122 @@
+# Python for Beginners - Week 2: Data Structures and Functions  
+## Day 02: Lists, Creating and Manipulating Lists, and List Comprehension
+
+### 1. **Lists**
+A list is a collection data type in Python that is ordered, mutable, and allows duplicate elements. Lists are used to store multiple items in a single variable.
+
+#### **Creating a List**
+```python
+# Empty list
+empty_list = []
+
+# List of integers
+numbers = [1, 2, 3, 4, 5]
+
+# List of mixed data types
+mixed_list = [1, "hello", 3.14, True]
+
+# List of lists (nested list)
+nested_list = [[1, 2], [3, 4], [5, 6]]
+```
+
+#### **Accessing Elements**
+```python
+fruits = ["apple", "banana", "cherry"]
+print(fruits[0])  # apple
+print(fruits[-1]) # cherry (last element)
+```
+
+#### **List Properties**
+- **Ordered:** Elements have a defined order.
+- **Mutable:** You can change, add, or remove elements.
+- **Allows Duplicates:** Lists can contain duplicate values.
+
+---
+
+### 2. **Creating and Manipulating Lists**
+
+#### **Adding Elements**
+```python
+# Using append()
+fruits.append("orange")
+print(fruits)  # ["apple", "banana", "cherry", "orange"]
+
+# Using insert()
+fruits.insert(1, "grape")
+print(fruits)  # ["apple", "grape", "banana", "cherry", "orange"]
+```
+
+#### **Removing Elements**
+```python
+# Using remove()
+fruits.remove("banana")
+print(fruits)  # ["apple", "grape", "cherry", "orange"]
+
+# Using pop()
+removed = fruits.pop()  # removes last element
+print(removed)  # orange
+```
+
+#### **Other Useful Methods**
+```python
+# length of the list
+print(len(fruits))  # 4
+
+# Sorting the list
+fruits.sort()
+print(fruits)  # ['apple', 'cherry', 'grape']
+
+# Reversing the list
+fruits.reverse()
+print(fruits)  # ['grape', 'cherry', 'apple']
+```
+
+#### **Slicing Lists**
+```python
+numbers = [0, 1, 2, 3, 4, 5]
+print(numbers[1:4])  # [1, 2, 3]
+print(numbers[:3])   # [0, 1, 2]
+print(numbers[::2])  # [0, 2, 4]
+```
+
+---
+
+### 3. **List Comprehension**
+List comprehension provides a concise way to create lists.
+
+#### **Basic Syntax:**
+```python
+[expression for item in iterable if condition]
+```
+
+#### **Examples:**
+```python
+# Create a list of squares
+squares = [x**2 for x in range(6)]
+print(squares)  # [0, 1, 4, 9, 16, 25]
+
+# Filter even numbers
+evens = [x for x in range(10) if x % 2 == 0]
+print(evens)  # [0, 2, 4, 6, 8]
+
+# Convert all strings to uppercase
+fruits = ["apple", "banana", "cherry"]
+upper_fruits = [fruit.upper() for fruit in fruits]
+print(upper_fruits)  # ['APPLE', 'BANANA', 'CHERRY']
+```
+
+#### **Nested List Comprehension:**
+```python
+# Flatten a nested list
+nested = [[1, 2], [3, 4], [5, 6]]
+flattened = [num for sublist in nested for num in sublist]
+print(flattened)  # [1, 2, 3, 4, 5, 6]
+```
+
+---
+### ✅ **Key Takeaways:**
+- Lists are versatile and widely used in Python.
+- You can easily add, remove, and manipulate elements in a list.
+- List comprehension is a powerful tool to create and manipulate lists concisely.
+
+---

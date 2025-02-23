@@ -123,6 +123,7 @@
     </div>
 
     <script>
+        const sessionId = new URLSearchParams(window.location.search).get("session_id");
         const quizContent = document.getElementById("quiz-content");
         const submitButton = document.getElementById("submit-quiz");
         const quizTitle = document.getElementById("quiz-title");
@@ -144,7 +145,7 @@
                 return;
             }
 
-            axios.post("/start_quiz", { course, week, day, topic })
+            axios.post("/start_quiz", { course, week, day, topic, session_id: sessionId })
                 .then(response => {
                     const quizResponse = response.data.quiz.quiz;
                     quizData = quizResponse.questions;
@@ -206,7 +207,7 @@
                 return;
             }
 
-            axios.post("/submit_quiz", { responses: userResponses, quiz: { questions: quizData } })
+            axios.post("/submit_quiz", { responses: userResponses, quiz: { questions: quizData }, session_id: sessionId })
                 .then(response => {
                     const { score, total, feedback } = response.data;
                     quizContent.innerHTML = `
